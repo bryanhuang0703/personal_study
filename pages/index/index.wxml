@@ -8,13 +8,13 @@
         data-id="{{item.id}}" data-type="{{item.type}}" bindtap="open" hover-class="tap-active">
     <view class="deck-top">
       <text class="tag">{{item.tag}}</text>
-      <text class="ct">{{item.total}} 条</text>
+      <text class="ct">{{item.total}} {{item.unit}}</text>
     </view>
     <view class="title">{{item.title}}</view>
     <view class="en" wx:if="{{item.subtitle}}">{{item.subtitle}}</view>
     <view class="desc" wx:if="{{item.desc}}">{{item.desc}}</view>
     <view class="bar"><view class="fill" style="width:{{item.pct}}%"></view></view>
-    <view class="meta">已掌握 {{item.known}} / {{item.total}} · {{item.pct}}%</view>
+    <view class="meta">{{item.progressLabel}} {{item.known}} / {{item.total}} · {{item.pct}}%</view>
   </view>
 
   <view class="soon">更多模块陆续加入</view>

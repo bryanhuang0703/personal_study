@@ -1,7 +1,8 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/glossary/glossary"
+    "pages/glossary/glossary",
+    "pages/lesson/lesson"
   ],
   "window": {
     "navigationBarTitleText": "学习工具",

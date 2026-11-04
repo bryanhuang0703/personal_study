@@ -59,13 +59,4 @@ const outPath = path.join(root, 'data/decks', id + '.js');
 fs.writeFileSync(outPath, out);
 console.log('写入', path.relative(root, outPath), `（${cats.length} 个分类，${terms.length} 条）`);
 
-const regPath = path.join(root, 'data/registry.js');
-let reg = fs.readFileSync(regPath, 'utf8');
-const line = `  require('./decks/${id}.js'),`;
-if (!reg.includes(`./decks/${id}.js`)) {
-  reg = reg.replace(/(\s*\/\/ <\/decks>)/, '\n' + line + '$1');
-  fs.writeFileSync(regPath, reg);
-  console.log('已注册到 data/registry.js');
-} else {
-  console.log('registry 中已存在，跳过注册');
-}
+require('./register')(id);

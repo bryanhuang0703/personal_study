@@ -4,6 +4,7 @@ const DECKS = [
   // <decks>
   require('./decks/robotics.js'),
   require('./decks/ta-kit.js'),
+  require('./decks/cs50-w4.js'),
   // </decks>
 ];
 
@@ -14,6 +15,12 @@ const cache = {};
 // 第 5 列可选扩展：{ abbr, noteEn, why, whyEn }
 function build(d) {
   if (cache[d.id]) return cache[d.id];
+  if (d.type === 'lesson') {
+    // 概念卡：items 即 cards，进度按卡片下标记“已学完”
+    const items = d.cards.map((c, i) => Object.assign({ i, no: pad(i + 1), points: [], links: [], quiz: [], minutes: 0 }, c));
+    cache[d.id] = Object.assign({ progressLabel: '已学完' }, d, { items });
+    return cache[d.id];
+  }
   const counter = {};
   const items = d.terms.map((r, i) => {
     counter[r[0]] = (counter[r[0]] || 0) + 1;
@@ -34,5 +41,10 @@ module.exports = {
   get: id => {
     const d = DECKS.find(x => x.id === id);
     return d ? build(d) : null;
+  },
+  // 找同一课程某一周的 lesson 模块 id（用于周与周之间跳转），没有返回 ''
+  findWeek: (course, week) => {
+    const d = DECKS.find(x => x.type === 'lesson' && x.course === course && x.week === week);
+    return d ? d.id : '';
   }
 };

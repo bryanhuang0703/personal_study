@@ -9,10 +9,12 @@ app.json / app.wxss / theme.json   全局配置、主题变量（自动跟随深
 data/registry.js                   模块注册表（首页列表顺序）
 data/decks/<id>.js                 每个学习模块一份数据
 pages/index/                       首页：模块列表 + 进度
-pages/glossary/                    术语类模块：浏览 / 闪卡 / 自测
+pages/glossary/                    术语类模块（type: glossary）：浏览 / 问答 / 闪卡 / 自测
+pages/lesson/                      概念卡模块（type: lesson）：概览 / 学习 / 自测
 utils/store.js                     本地进度（wx storage，按模块隔离）
 source/                            原始 HTML 存档（不打包）
-tools/html2deck.js                 HTML → 模块数据 转换脚本（不打包）
+tools/html2deck.js                 术语 HTML → 模块数据（不打包）
+tools/cs50-json2deck.js            CS50 概念卡 JSON → 模块数据（不打包）
 ```
 
 ## 本地运行
@@ -31,6 +33,14 @@ node tools/html2deck.js source/xxx.html xxx 术语
 脚本会生成 `data/decks/xxx.js` 并自动注册到 `data/registry.js`，开发者工具里刷新即可。
 
 **手写数据**：照 `data/decks/robotics.js` 的格式写 `terms: [[分类序号, 中文, English, 说明], ...]`，再在 `registry.js` 的 `<decks>` 区块 require。
+
+**CS50 概念卡**（`schema: cs50-cards/v1` 的 JSON，一周一份）：
+
+```bash
+node tools/cs50-json2deck.js source/cs50-week5.json
+```
+
+生成 `data/decks/cs50-w5.js` 并注册。同一课程（`course` 相同）的各周会自动互相链接：概览里的周时间线、卡片里的「前后联系」点击即跳到对应周，没加入的周会提示。
 
 **格式不同的 HTML**（比如 `source/ta-kit-glossary.html`）：发给 Claude 转换即可。术语页支持的可选字段：
 
