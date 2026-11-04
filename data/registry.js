@@ -4,6 +4,10 @@ const DECKS = [
   // <decks>
   require('./decks/robotics.js'),
   require('./decks/ta-kit.js'),
+  require('./decks/cs50-w0.js'),
+  require('./decks/cs50-w1.js'),
+  require('./decks/cs50-w2.js'),
+  require('./decks/cs50-w3.js'),
   require('./decks/cs50-w4.js'),
   // </decks>
 ];
@@ -37,7 +41,14 @@ function build(d) {
 }
 
 module.exports = {
-  list: () => DECKS.map(build),
+  // 首页顺序：按注册顺序；同一课程的 lesson 聚在第一次出现的位置，并按 week 升序
+  list: () => {
+    const groupPos = d => DECKS.findIndex(x => d.type === 'lesson' ? x.type === 'lesson' && x.course === d.course : x === d);
+    return DECKS
+      .map((d, i) => ({ d, g: groupPos(d), w: d.type === 'lesson' ? d.week : i }))
+      .sort((a, b) => a.g - b.g || a.w - b.w)
+      .map(x => build(x.d));
+  },
   get: id => {
     const d = DECKS.find(x => x.id === id);
     return d ? build(d) : null;
