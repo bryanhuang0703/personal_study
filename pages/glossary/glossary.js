@@ -32,7 +32,8 @@ Page({
   data: {
     mode: 'browse', cat: -1, q: '', chapters: [], total: 0, knownCount: 0, pct: 0,
     maskZh: false, maskEn: false, onlyNew: false,
-    groups: [], count: 0,
+    groups: [], count: 0, brief: false, hasExtra: false, whyLabel: '',
+    tabs: [], qaGroups: [], qaCount: 0, qaNote: '',
     fc: {}, quiz: {}, canSpeak: tts.available
   },
 
@@ -43,14 +44,19 @@ Page({
     this.T = d.items;
     this.known = store.getKnown(d.id);
     this.S = {
-      mode: ['browse', 'cards', 'quiz'].includes(opt.mode) ? opt.mode : 'browse',
-      cat: -1, q: '', maskZh: false, maskEn: false, onlyNew: false, rev: {},
+      mode: 'browse',
+      cat: -1, q: '', maskZh: false, maskEn: false, onlyNew: false, rev: {}, brief: false, qaOpen: {},
       fcFront: 'zh', fcIdx: 0, fcDeck: [], flip: false,
       quizDir: 'zh2en', quiz: null, score: { n: 0, ok: 0, streak: 0 }
     };
     wx.setNavigationBarTitle({ title: d.title });
     const counts = d.cats.map((_, c) => this.T.filter(t => t.cat === c).length);
+    const tabs = [{ m: 'browse', name: '浏览' }]
+      .concat(d.qa ? [{ m: 'qa', name: d.qaLabel || '问答' }] : [])
+      .concat([{ m: 'cards', name: '闪卡' }, { m: 'quiz', name: '自测' }]);
+    if (tabs.some(t => t.m === opt.mode)) this.S.mode = opt.mode;
     this.setData({
+      tabs, hasExtra: d.hasExtra, whyLabel: d.whyLabel || '要点', qaNote: d.qaNote || '',
       total: this.T.length,
       chapters: [{ cat: -1, name: '全部', ct: this.T.length }]
         .concat(d.cats.map((c, i) => ({ cat: i, name: c[0], ct: counts[i] })))
@@ -64,7 +70,7 @@ Page({
     const S = this.S, q = S.q.toLowerCase();
     return this.T.filter(t =>
       (S.cat < 0 || t.cat === S.cat) &&
-      (!q || (t.zh + t.en + t.note).toLowerCase().includes(q)) &&
+      (!q || t.search.includes(q)) &&
       (!S.onlyNew || !this.known.has(t.i)));
   },
   saveKnown() { store.saveKnown(this.d.id, this.known); },
@@ -74,11 +80,12 @@ Page({
     const S = this.S;
     const base = {
       mode: S.mode, cat: S.cat, q: S.q,
-      maskZh: S.maskZh, maskEn: S.maskEn, onlyNew: S.onlyNew,
+      maskZh: S.maskZh, maskEn: S.maskEn, onlyNew: S.onlyNew, brief: S.brief,
       knownCount: this.known.size,
       pct: this.T.length ? this.known.size / this.T.length * 100 : 0
     };
-    const view = S.mode === 'cards' ? this.viewCards() : S.mode === 'quiz' ? this.viewQuiz() : this.viewBrowse();
+    const view = S.mode === 'cards' ? this.viewCards() : S.mode === 'quiz' ? this.viewQuiz()
+      : S.mode === 'qa' ? this.viewQa() : this.viewBrowse();
     this.setData(Object.assign(base, view));
   },
 
@@ -92,14 +99,31 @@ Page({
         groups.push(g);
       }
       g.items.push({
-        i: t.i, code: t.code,
+        i: t.i, code: t.code, abbr: t.abbr,
         zh: segs(t.zh, S.q), en: segs(t.en, S.q), note: segs(t.note, S.q),
+        noteEn: t.noteEn, why: t.why, whyEn: t.whyEn,
         mz: S.maskZh && !S.rev['z' + t.i],
         me: S.maskEn && !S.rev['e' + t.i],
         known: this.known.has(t.i)
       });
     }
     return { groups, count: list.length };
+  },
+
+  viewQa() {
+    const S = this.S, q = S.q.toLowerCase(), qaGroups = [];
+    let n = 0, qaCount = 0;
+    for (const [g, items] of this.d.qa) {
+      const its = [];
+      for (const it of items) {
+        const no = 'Q' + pad(++n);
+        if (q && !it.join(' ').toLowerCase().includes(q)) continue;
+        its.push({ no, zh: it[0], en: it[1], why: it[2], good: it[3], flag: it[4], open: !!S.qaOpen[no] });
+      }
+      if (its.length) qaGroups.push({ g, items: its });
+      qaCount += its.length;
+    }
+    return { qaGroups, qaCount };
   },
 
   buildDeck(rand) {
@@ -125,14 +149,17 @@ Page({
         dirLabel: zhFront ? '中文 → English' : 'English → 中文',
         frontText: zhFront ? t.zh : t.en,
         backText: zhFront ? t.en : t.zh,
-        note: t.note
+        abbr: t.abbr, note: t.note, noteEn: t.noteEn
       }
     };
   },
 
   newQ() {
-    const S = this.S, T = this.T;
-    const p = this.pool().length >= 4 ? this.pool() : T.filter(t => S.cat < 0 || t.cat === S.cat);
+    const S = this.S;
+    // 看释义选术语：只用有释义的条目
+    const T = S.quizDir === 'def2term' ? this.T.filter(t => t.note) : this.T;
+    const pl = this.pool().filter(t => T.includes(t));
+    const p = pl.length >= 4 ? pl : T.filter(t => S.cat < 0 || t.cat === S.cat);
     const src = p.length >= 4 ? p : T;
     const ans = src[Math.random() * src.length | 0];
     let dis = T.filter(t => t.i !== ans.i && t.cat === ans.cat);
@@ -145,21 +172,24 @@ Page({
     const S = this.S;
     if (!S.quiz) this.newQ();
     const { ans, opts, picked } = S.quiz;
-    const z = S.quizDir === 'zh2en', done = picked != null;
+    const dir = S.quizDir, z = dir === 'zh2en', def = dir === 'def2term', done = picked != null;
     return {
       quiz: {
-        dir: S.quizDir,
+        dir, hasDef: this.T.some(t => t.note),
         scope: S.cat < 0 ? '全部章节' : this.d.cats[S.cat][0],
         n: S.score.n,
         acc: S.score.n ? Math.round(S.score.ok / S.score.n * 100) + '%' : '–',
         streak: S.score.streak,
         i: ans.i, tag: this.d.cats[ans.cat][0] + ' · ' + ans.code,
-        q: z ? ans.zh : ans.en, isEn: !z,
-        note: done ? ans.note : '',
+        prompt: def ? '哪个术语符合这个描述？' : '',
+        q: z ? ans.zh : def ? ans.note : ans.en,
+        qCls: dir === 'en2zh' ? 'en' : def ? 'def' : '',
+        note: done && !def ? ans.note : '',
+        why: done ? ans.why : '', whyEn: done ? ans.whyEn : '', whyLabel: this.d.whyLabel || '要点',
         done, right: picked === ans.i,
-        ansLabel: z ? ans.en : ans.zh,
+        ansLabel: z ? ans.en : def ? ans.zh + ' / ' + ans.en : ans.zh,
         opts: opts.map((o, k) => ({
-          i: o.i, k: k + 1, label: z ? o.en : o.zh,
+          i: o.i, k: k + 1, label: z ? o.en : o.zh, sub: def ? o.en : '',
           cls: !done ? '' : o.i === ans.i ? 'right' : o.i === picked ? 'wrong' : ''
         }))
       }
@@ -217,6 +247,13 @@ Page({
   },
   onHide() { tts.stop(); },
   onUnload() { tts.stop(); },
+
+  // ---------- 问答 ----------
+  onQa(e) {
+    const no = e.currentTarget.dataset.no;
+    this.S.qaOpen[no] = !this.S.qaOpen[no];
+    this.render();
+  },
 
   // ---------- 浏览 ----------
   onRev(e) {

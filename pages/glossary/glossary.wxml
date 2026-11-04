@@ -6,7 +6,7 @@
       <input class="sinput" value="{{q}}" placeholder="搜索中文、English 或说明" confirm-type="search" bindinput="onSearch"/>
       <view wx:if="{{q}}" class="sclear" bindtap="onClear">✕</view>
     </view>
-    <scroll-view class="chaps" scroll-x enhanced show-scrollbar="{{false}}">
+    <scroll-view wx:if="{{mode !== 'qa'}}" class="chaps" scroll-x enhanced show-scrollbar="{{false}}">
       <view wx:for="{{chapters}}" wx:key="cat" class="chap {{cat === item.cat ? 'on' : ''}}" data-cat="{{item.cat}}" bindtap="onCat">
         <text>{{item.name}}</text><text class="ct">{{item.ct}}</text>
       </view>
@@ -25,6 +25,7 @@
         <view class="chip {{maskZh ? 'on' : ''}}" data-k="maskZh" bindtap="onTog">遮住中文</view>
         <view class="chip {{maskEn ? 'on' : ''}}" data-k="maskEn" bindtap="onTog">遮住英文</view>
         <view class="chip {{onlyNew ? 'on' : ''}}" data-k="onlyNew" bindtap="onTog">只看未掌握</view>
+        <view wx:if="{{hasExtra}}" class="chip {{brief ? 'on' : ''}}" data-k="brief" bindtap="onTog">只看术语</view>
         <text class="cnt">{{count}} 条</text>
       </scroll-view>
 
@@ -44,10 +45,42 @@
               <view class="ib {{item.known ? 'known' : ''}}" data-i="{{item.i}}" bindtap="onKnow">✓</view>
             </view>
             <view class="en" data-rev="e{{item.i}}" bindtap="onRev">
-              <view class="mw {{item.me ? 'mask' : ''}}"><text wx:for="{{item.en}}" wx:for-item="s" wx:key="k" class="{{s.h ? 'hl' : ''}}">{{s.t}}</text></view>
+              <view class="mw {{item.me ? 'mask' : ''}}"><text wx:for="{{item.en}}" wx:for-item="s" wx:key="k" class="{{s.h ? 'hl' : ''}}">{{s.t}}</text><text wx:if="{{item.abbr}}" class="abbr">{{item.abbr}}</text></view>
             </view>
-            <view class="note" wx:if="{{item.note.length}}"><text wx:for="{{item.note}}" wx:for-item="s" wx:key="k" class="{{s.h ? 'hl' : ''}}">{{s.t}}</text></view>
+            <block wx:if="{{!brief}}">
+              <view class="note" wx:if="{{item.note.length}}"><text wx:for="{{item.note}}" wx:for-item="s" wx:key="k" class="{{s.h ? 'hl' : ''}}">{{s.t}}</text></view>
+              <view class="note-en" wx:if="{{item.noteEn}}">{{item.noteEn}}</view>
+              <view class="why" wx:if="{{item.why}}">
+                <view class="why-lab">{{whyLabel}}</view>
+                <view>{{item.why}}</view>
+                <view class="why-en" wx:if="{{item.whyEn}}">{{item.whyEn}}</view>
+              </view>
+            </block>
             <view class="code">{{item.code}}</view>
+          </view>
+        </view>
+      </block>
+    </block>
+
+    <!-- 问答 -->
+    <block wx:elif="{{mode === 'qa'}}">
+      <view class="qa-note" wx:if="{{qaNote}}">{{qaNote}}</view>
+      <view wx:if="{{!qaCount}}" class="list empty">没有匹配的问题，换个关键词试试。</view>
+      <block wx:for="{{qaGroups}}" wx:for-item="g" wx:key="g">
+        <view class="sechead"><text class="h2">{{g.g}}</text></view>
+        <view class="qa {{item.open ? 'open' : ''}}" wx:for="{{g.items}}" wx:key="no">
+          <view class="qa-sum" data-no="{{item.no}}" bindtap="onQa" hover-class="tap-active">
+            <text class="qn">{{item.no}}</text>
+            <view class="qa-t">
+              <view class="qzh">{{item.zh}}</view>
+              <view class="qen">{{item.en}}</view>
+            </view>
+            <text class="qa-arrow">{{item.open ? '−' : '+'}}</text>
+          </view>
+          <view class="qa-body" wx:if="{{item.open}}">
+            <view class="qa-sec"><view class="qa-h">为什么问 · Why ask</view><view>{{item.why}}</view></view>
+            <view class="qa-sec good-b"><view class="qa-h">好的回答 · Good answer</view><view>{{item.good}}</view></view>
+            <view class="qa-sec flag-b"><view class="qa-h">警惕信号 · Red flag</view><view>{{item.flag}}</view></view>
           </view>
         </view>
       </block>
@@ -68,7 +101,7 @@
           <text>{{fc.catName}} · {{fc.code}}</text>
           <text>{{fc.idx}} / {{fc.len}}<text wx:if="{{fc.known}}" class="good"> · 已掌握</text></text>
         </view>
-        <view class="card {{fc.flip ? 'flip' : ''}}" bindtap="onFlip" bindtouchstart="onTs" bindtouchend="onTe">
+        <view class="card {{hasExtra ? 'tall' : ''}} {{fc.flip ? 'flip' : ''}}" bindtap="onFlip" bindtouchstart="onTs" bindtouchend="onTe">
           <view class="inner">
             <view class="face front">
               <text class="tag">{{fc.dirLabel}}</text>
@@ -76,10 +109,13 @@
               <text class="hint">轻点翻面，左右滑动切换</text>
             </view>
             <view class="face back">
-              <text class="tag">答案</text>
-              <text class="big {{fc.front === 'zh' ? 'en' : ''}}">{{fc.backText}}</text>
-              <text class="sub">{{fc.frontText}}</text>
-              <text class="desc" wx:if="{{fc.note}}">{{fc.note}}</text>
+              <text class="tag">答案{{fc.abbr ? ' · ' + fc.abbr : ''}}</text>
+              <view class="fbody">
+                <view class="big {{fc.front === 'zh' ? 'en' : ''}}">{{fc.backText}}</view>
+                <view class="sub">{{fc.frontText}}</view>
+                <view class="desc" wx:if="{{fc.note}}">{{fc.note}}</view>
+                <view class="desc desc-en" wx:if="{{fc.noteEn}}">{{fc.noteEn}}</view>
+              </view>
             </view>
           </view>
         </view>
@@ -94,10 +130,11 @@
     </block>
 
     <!-- 自测 -->
-    <block wx:else>
+    <block wx:elif="{{mode === 'quiz'}}">
       <scroll-view class="toolbar" scroll-x enhanced show-scrollbar="{{false}}">
         <view class="chip {{quiz.dir === 'zh2en' ? 'on' : ''}}" data-d="zh2en" bindtap="onDir">看中文选英文</view>
         <view class="chip {{quiz.dir === 'en2zh' ? 'on' : ''}}" data-d="en2zh" bindtap="onDir">看英文选中文</view>
+        <view wx:if="{{quiz.hasDef}}" class="chip {{quiz.dir === 'def2term' ? 'on' : ''}}" data-d="def2term" bindtap="onDir">看释义选术语</view>
         <text class="cnt">题目来自：{{quiz.scope}}</text>
       </scroll-view>
       <view class="qz-score">
@@ -107,17 +144,24 @@
       </view>
       <view class="qbox">
         <view class="q-tag">{{quiz.tag}}</view>
-        <view class="q {{quiz.isEn ? 'en' : ''}}">{{quiz.q}}</view>
+        <view class="q-prompt" wx:if="{{quiz.prompt}}">{{quiz.prompt}}</view>
+        <view class="q {{quiz.qCls}}">{{quiz.q}}</view>
         <view class="q-note" wx:if="{{quiz.note}}">{{quiz.note}}</view>
         <view class="opts">
           <view wx:for="{{quiz.opts}}" wx:key="i" class="opt {{item.cls}}" data-i="{{item.i}}" bindtap="onPick"
                 hover-class="{{quiz.done ? 'none' : 'opt-hover'}}">
-            <text class="k">{{item.k}}</text><text>{{item.label}}</text>
+            <text class="k">{{item.k}}</text>
+            <view class="opt-t"><view>{{item.label}}</view><view class="opt-sub" wx:if="{{item.sub}}">{{item.sub}}</view></view>
           </view>
         </view>
         <view class="fb" wx:if="{{quiz.done}}">
           <block wx:if="{{quiz.right}}"><text class="fb-ok">答对了。</text></block>
           <block wx:else><text class="fb-no">答错了。</text>正确答案：{{quiz.ansLabel}}，已移出“已掌握”。</block>
+        </view>
+        <view class="why" wx:if="{{quiz.why}}">
+          <view class="why-lab">{{quiz.whyLabel}}</view>
+          <view>{{quiz.why}}</view>
+          <view class="why-en" wx:if="{{quiz.whyEn}}">{{quiz.whyEn}}</view>
         </view>
         <view class="q-ctrl {{canSpeak ? '' : 'solo'}}">
           <view class="btn" wx:if="{{canSpeak}}" data-i="{{quiz.i}}" bindtap="onSay" hover-class="tap-active"><image class="spk" src="/assets/speaker.svg"/>朗读英文</view>
@@ -129,8 +173,6 @@
 
   <!-- 底部模式切换 -->
   <view class="tabs">
-    <view class="tab {{mode === 'browse' ? 'on' : ''}}" data-m="browse" bindtap="onTab">浏览</view>
-    <view class="tab {{mode === 'cards' ? 'on' : ''}}" data-m="cards" bindtap="onTab">闪卡</view>
-    <view class="tab {{mode === 'quiz' ? 'on' : ''}}" data-m="quiz" bindtap="onTab">自测</view>
+    <view wx:for="{{tabs}}" wx:key="m" class="tab {{mode === item.m ? 'on' : ''}}" data-m="{{item.m}}" bindtap="onTab">{{item.name}}</view>
   </view>
 </view>

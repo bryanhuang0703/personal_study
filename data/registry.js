@@ -3,21 +3,29 @@
 const DECKS = [
   // <decks>
   require('./decks/robotics.js'),
+  require('./decks/ta-kit.js'),
   // </decks>
 ];
 
 const pad = n => String(n).padStart(2, '0');
 const cache = {};
 
-// 把原始 terms 展开成带编号的对象：{ i, cat, zh, en, note, code: "01.03" }
+// 把原始 terms 展开成带编号的对象：{ i, cat, zh, en, note, code: "01.03", ...可选扩展字段 }
+// 第 5 列可选扩展：{ abbr, noteEn, why, whyEn }
 function build(d) {
   if (cache[d.id]) return cache[d.id];
   const counter = {};
   const items = d.terms.map((r, i) => {
     counter[r[0]] = (counter[r[0]] || 0) + 1;
-    return { i, cat: r[0], zh: r[1], en: r[2], note: r[3] || '', code: pad(r[0] + 1) + '.' + pad(counter[r[0]]) };
+    const x = r[4] || {};
+    return Object.assign({ abbr: '', noteEn: '', why: '', whyEn: '' }, x, {
+      i, cat: r[0], zh: r[1], en: r[2], note: r[3] || '',
+      code: pad(r[0] + 1) + '.' + pad(counter[r[0]]),
+      search: [r[1], r[2], r[3], x.abbr, x.noteEn, x.why, x.whyEn].join(' ').toLowerCase()
+    });
   });
-  cache[d.id] = Object.assign({}, d, { items });
+  const hasExtra = items.some(t => t.noteEn || t.why);
+  cache[d.id] = Object.assign({}, d, { items, hasExtra });
   return cache[d.id];
 }
 

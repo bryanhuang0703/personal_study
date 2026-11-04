@@ -32,6 +32,12 @@ node tools/html2deck.js source/xxx.html xxx 术语
 
 **手写数据**：照 `data/decks/robotics.js` 的格式写 `terms: [[分类序号, 中文, English, 说明], ...]`，再在 `registry.js` 的 `<decks>` 区块 require。
 
+**格式不同的 HTML**（比如 `source/ta-kit-glossary.html`）：发给 Claude 转换即可。术语页支持的可选字段：
+
+- 每条 term 第 5 列：`{ abbr, noteEn, why, whyEn }`，即缩写、英文释义、要点（标签由模块的 `whyLabel` 决定）及其英文。有就显示，没有就隐藏。
+- 模块级 `qa: [[分组, [[问题, Question, 为什么问, 好的回答, 警惕信号], ...]], ...]`：有则多一个问答 tab（名称取 `qaLabel`，顶部提示取 `qaNote`）。
+- 自测「看释义选术语」对所有带释义的模块自动可用。
+
 **非术语类页面**（比如框架笔记、案例拆解）：模块的 `type` 字段决定路由到 `pages/<type>/<type>`。新增一种类型 = 新建对应页面 + 在 `app.json` 的 `pages` 里登记。
 
 ## 朗读（微信同声传译插件）

@@ -44,6 +44,12 @@
 .en { font-size: 15px; font-weight: 500; color: var(--steel); margin-top: 2px; }
 .note { font-size: 14px; color: var(--muted); margin-top: 4px; }
 .code { position: absolute; right: 14px; bottom: 8px; font-size: 10px; color: var(--line); font-family: "SF Mono", Menlo, monospace; }
+.abbr { margin-left: 8px; font-size: 12px; font-weight: 500; color: var(--muted); font-family: "SF Mono", Menlo, monospace; }
+.mask .abbr { color: transparent; }
+.note-en { font-size: 13px; color: var(--muted); opacity: .85; margin-top: 2px; }
+.why { margin-top: 8px; padding-left: 10px; border-left: 3px solid var(--accent); font-size: 14px; }
+.why-lab { font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: .04em; }
+.why-en { font-size: 13px; color: var(--muted); margin-top: 2px; }
 .mw { display: inline-block; border-radius: 4px; transition: all .15s; }
 .mask { background: var(--line); color: transparent; }
 .mask .hl { background: none; color: transparent; }
@@ -57,6 +63,10 @@
 /* 闪卡 */
 .fc-meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
 .card { height: 46vh; max-height: 340px; perspective: 1400px; }
+.card.tall { height: 58vh; max-height: 460px; }
+.face.back { overflow-y: auto; }
+.fbody { margin: auto 0; display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 12px; }
+.desc-en { font-size: 13px; opacity: .85; }
 .inner { position: relative; height: 100%; transition: transform .5s cubic-bezier(.2,.7,.2,1); transform-style: preserve-3d; -webkit-transform-style: preserve-3d; }
 .card.flip .inner { transform: rotateY(180deg); }
 .face {
@@ -91,6 +101,10 @@
 .q-tag { font-size: 12px; color: var(--muted); font-family: "SF Mono", Menlo, monospace; }
 .q { font-size: 26px; font-weight: 700; line-height: 1.25; margin: 8px 0 4px; }
 .q.en { color: var(--steel); font-size: 22px; }
+.q.def { font-size: 17px; font-weight: 500; line-height: 1.55; }
+.q-prompt { font-size: 13px; color: var(--accent); margin-top: 8px; }
+.opt-t { flex: 1; min-width: 0; }
+.opt-sub { font-size: 12px; color: var(--muted); }
 .q-note { color: var(--muted); font-size: 14px; }
 .opts { margin-top: 16px; }
 .opt {
@@ -106,6 +120,23 @@
 .fb-no { color: var(--accent); font-weight: 600; }
 .q-ctrl { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
 .q-ctrl.solo { grid-template-columns: 1fr; }
+
+/* 问答 */
+.qa-note { background: var(--accent-soft); color: var(--ink); border-radius: 8px; padding: 10px 14px; font-size: 14px; margin-bottom: 4px; }
+.qa { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
+.qa-sum { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; }
+.qn { flex: none; font-size: 12px; color: var(--accent); padding-top: 3px; font-family: "SF Mono", Menlo, monospace; }
+.qa-t { flex: 1; min-width: 0; }
+.qzh { font-weight: 700; font-size: 15px; }
+.qen { font-size: 13px; color: var(--muted); }
+.qa-arrow { flex: none; color: var(--muted); font-size: 18px; line-height: 1.2; }
+.qa-body { padding: 0 14px 14px; }
+.qa-sec { border-left: 3px solid var(--line); padding-left: 10px; margin-top: 10px; font-size: 14px; }
+.qa-h { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .04em; }
+.good-b { border-color: var(--good); }
+.good-b .qa-h { color: var(--good); }
+.flag-b { border-color: var(--accent); }
+.flag-b .qa-h { color: var(--accent); }
 
 /* 底部 tabs */
 .tabs {
