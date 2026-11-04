@@ -34,7 +34,16 @@ node tools/html2deck.js source/xxx.html xxx 术语
 
 **非术语类页面**（比如框架笔记、案例拆解）：模块的 `type` 字段决定路由到 `pages/<type>/<type>`。新增一种类型 = 新建对应页面 + 在 `app.json` 的 `pages` 里登记。
 
+## 朗读（微信同声传译插件）
+
+英文朗读走「微信同声传译」插件（`utils/tts.js`），已在 `app.json` 的 `plugins` 声明。启用前必须：
+
+1. `project.config.json` 的 appid 换成自己的小程序 appid（测试号 `touristappid` 无法使用插件，会编译报错）。
+2. 小程序后台 → 设置 → 第三方设置 → 插件管理 → 添加插件，搜「微信同声传译」（AppID `wx069ba97219f66d99`）。
+3. 版本号以后台显示的最新版为准，必要时改 `app.json` 里的 `version`。
+
+合成结果按文本缓存（插件返回的音频地址有有效期），iOS 静音键下也会出声。暂时不想配插件：删掉 `app.json` 里的 `plugins` 段即可，朗读按钮会自动隐藏。
+
 ## 与原 HTML 的差异
 
-- 朗读：小程序无 `speechSynthesis`，已去掉。要恢复需在小程序后台添加「微信同声传译」插件。
 - 键盘快捷键：移动端无意义，去掉；闪卡支持左右滑动切换，标记时有轻震动反馈。

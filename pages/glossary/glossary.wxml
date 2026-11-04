@@ -40,6 +40,7 @@
               <view class="zh" data-rev="z{{item.i}}" bindtap="onRev">
                 <view class="mw {{item.mz ? 'mask' : ''}}"><text wx:for="{{item.zh}}" wx:for-item="s" wx:key="k" class="{{s.h ? 'hl' : ''}}">{{s.t}}</text></view>
               </view>
+              <view class="ib" wx:if="{{canSpeak}}" data-i="{{item.i}}" bindtap="onSay" hover-class="tap-active"><image class="spk" src="/assets/speaker.svg"/></view>
               <view class="ib {{item.known ? 'known' : ''}}" data-i="{{item.i}}" bindtap="onKnow">✓</view>
             </view>
             <view class="en" data-rev="e{{item.i}}" bindtap="onRev">
@@ -86,6 +87,7 @@
           <view class="btn again" data-ok="0" bindtap="onMark" hover-class="tap-active">还不熟</view>
           <view class="btn ok" data-ok="1" bindtap="onMark" hover-class="tap-active">✓ 记住了</view>
           <view class="btn" bindtap="onPrev" hover-class="tap-active">上一张</view>
+          <view class="btn" wx:if="{{canSpeak}}" data-i="{{fc.i}}" bindtap="onSay" hover-class="tap-active"><image class="spk" src="/assets/speaker.svg"/>朗读</view>
           <view class="btn" bindtap="onNext" hover-class="tap-active">下一张</view>
         </view>
       </block>
@@ -117,7 +119,10 @@
           <block wx:if="{{quiz.right}}"><text class="fb-ok">答对了。</text></block>
           <block wx:else><text class="fb-no">答错了。</text>正确答案：{{quiz.ansLabel}}，已移出“已掌握”。</block>
         </view>
-        <view class="btn pri next" bindtap="onNextQ" hover-class="tap-active">{{quiz.done ? '下一题' : '跳过'}}</view>
+        <view class="q-ctrl {{canSpeak ? '' : 'solo'}}">
+          <view class="btn" wx:if="{{canSpeak}}" data-i="{{quiz.i}}" bindtap="onSay" hover-class="tap-active"><image class="spk" src="/assets/speaker.svg"/>朗读英文</view>
+          <view class="btn pri" bindtap="onNextQ" hover-class="tap-active">{{quiz.done ? '下一题' : '跳过'}}</view>
+        </view>
       </view>
     </block>
   </view>

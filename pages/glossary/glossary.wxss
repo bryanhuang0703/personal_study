@@ -75,8 +75,12 @@
 .big.en { color: var(--steel); font-size: 25px; }
 .sub { font-size: 17px; font-weight: 500; }
 .desc { font-size: 14px; color: var(--muted); }
-.fc-ctrl { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
-.fc-ctrl .again, .fc-ctrl .ok { padding: 14px 6px; font-size: 16px; }
+.fc-ctrl { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.fc-ctrl .btn { flex: 1 1 26%; }
+.fc-ctrl .again, .fc-ctrl .ok { flex: 1 1 40%; padding: 14px 6px; font-size: 16px; }
+.spk { width: 16px; height: 16px; margin-right: 4px; }
+.ib .spk { margin-right: 0; }
+.r1 .ib + .ib { margin-left: -6px; }
 
 /* 自测 */
 .qz-score { display: flex; gap: 8px; margin-bottom: 12px; }
@@ -100,7 +104,8 @@
 .fb { margin-top: 6px; font-size: 14px; }
 .fb-ok { color: var(--good); font-weight: 600; }
 .fb-no { color: var(--accent); font-weight: 600; }
-.next { margin-top: 14px; }
+.q-ctrl { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+.q-ctrl.solo { grid-template-columns: 1fr; }
 
 /* 底部 tabs */
 .tabs {

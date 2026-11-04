@@ -1,5 +1,6 @@
 const registry = require('../../data/registry');
 const store = require('../../utils/store');
+const tts = require('../../utils/tts');
 
 const pad = n => String(n).padStart(2, '0');
 
@@ -32,7 +33,7 @@ Page({
     mode: 'browse', cat: -1, q: '', chapters: [], total: 0, knownCount: 0, pct: 0,
     maskZh: false, maskEn: false, onlyNew: false,
     groups: [], count: 0,
-    fc: {}, quiz: {}
+    fc: {}, quiz: {}, canSpeak: tts.available
   },
 
   onLoad(opt) {
@@ -118,7 +119,7 @@ Page({
     const zhFront = S.fcFront === 'zh';
     return {
       fc: {
-        empty: false, front: S.fcFront, flip: S.flip,
+        empty: false, front: S.fcFront, flip: S.flip, i: t.i,
         catName: this.d.cats[t.cat][0], code: t.code,
         idx: S.fcIdx + 1, len: d.length, known: this.known.has(t.i),
         dirLabel: zhFront ? '中文 → English' : 'English → 中文',
@@ -152,7 +153,7 @@ Page({
         n: S.score.n,
         acc: S.score.n ? Math.round(S.score.ok / S.score.n * 100) + '%' : '–',
         streak: S.score.streak,
-        tag: this.d.cats[ans.cat][0] + ' · ' + ans.code,
+        i: ans.i, tag: this.d.cats[ans.cat][0] + ' · ' + ans.code,
         q: z ? ans.zh : ans.en, isEn: !z,
         note: done ? ans.note : '',
         done, right: picked === ans.i,
@@ -209,6 +210,13 @@ Page({
       }
     });
   },
+
+  onSay(e) {
+    const t = this.T[+e.currentTarget.dataset.i];
+    if (t) tts.speak(t.en);
+  },
+  onHide() { tts.stop(); },
+  onUnload() { tts.stop(); },
 
   // ---------- 浏览 ----------
   onRev(e) {
