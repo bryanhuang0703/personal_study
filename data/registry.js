@@ -9,6 +9,9 @@ const DECKS = [
   require('./decks/cs50-w2.js'),
   require('./decks/cs50-w3.js'),
   require('./decks/cs50-w4.js'),
+  require('./decks/cs50-w8.js'),
+  require('./decks/cs50-w9.js'),
+  require('./decks/cs50-w10.js'),
   // </decks>
 ];
 

@@ -238,8 +238,8 @@ module.exports = {
           "text": "字母就是数字，所以能直接做算术"
         },
         {
-          "week": 10,
-          "text": "Week 10 讲现代加密、hash 和密码存储"
+          "week": 9,
+          "text": "Week 9 用不可逆的 hash 存储密码，比 Caesar 这类可逆加密安全"
         }
       ],
       "quiz": [

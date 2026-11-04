@@ -5,7 +5,7 @@ module.exports = {
   "tag": "CS50",
   "title": "CS50 · Week 4 Memory",
   "subtitle": "CS50x 2026",
-  "desc": "Week 4 揭开了前几周的抽象：数据到底放在哪里，怎么找到它。后面的数据结构、Python、Web 都建立在这层之上。",
+  "desc": "Week 4 揭开了前几周的抽象：数据到底放在哪里，怎么找到它。后面的数据结构、Python、SQL、Web 都建立在这层之上。",
   "schema": "cs50-cards/v1",
   "course": "CS50x 2026",
   "week": 4,
@@ -14,7 +14,7 @@ module.exports = {
   "license": "Based on CS50 by Harvard University, CC BY-NC-SA 4.0",
   "map": {
     "title": "这一周在全局里的位置",
-    "summary": "Week 4 揭开了前几周的抽象：数据到底放在哪里，怎么找到它。后面的数据结构、Python、Web 都建立在这层之上。",
+    "summary": "Week 4 揭开了前几周的抽象：数据到底放在哪里，怎么找到它。后面的数据结构、Python、SQL、Web 都建立在这层之上。",
     "chain": [
       {
         "week": 2,
@@ -38,9 +38,9 @@ module.exports = {
         "note": "把指针和 free 藏起来"
       },
       {
-        "week": 10,
-        "label": "Security",
-        "note": "内存错误变成安全漏洞"
+        "week": 7,
+        "label": "SQL",
+        "note": "不校验输入同样会导致 SQL injection"
       }
     ]
   },
@@ -235,8 +235,8 @@ module.exports = {
       "analogy": "C 给你整栋楼的钥匙，但不拦你走进别人家。",
       "links": [
         {
-          "week": 10,
-          "text": "buffer overflow 是经典安全漏洞，攻击者可借此改写程序行为"
+          "week": 7,
+          "text": "Buffer overflow 和 SQL injection 根源相同：没有约束不可信的输入"
         },
         {
           "week": 6,
