@@ -1,0 +1,131 @@
+<view class="page">
+  <!-- 顶部：搜索 + 章节 + 进度（吸顶） -->
+  <view class="head">
+    <view class="search">
+      <icon type="search" size="14" color="#93a3b1"/>
+      <input class="sinput" value="{{q}}" placeholder="搜索中文、English 或说明" confirm-type="search" bindinput="onSearch"/>
+      <view wx:if="{{q}}" class="sclear" bindtap="onClear">✕</view>
+    </view>
+    <scroll-view class="chaps" scroll-x enhanced show-scrollbar="{{false}}">
+      <view wx:for="{{chapters}}" wx:key="cat" class="chap {{cat === item.cat ? 'on' : ''}}" data-cat="{{item.cat}}" bindtap="onCat">
+        <text>{{item.name}}</text><text class="ct">{{item.ct}}</text>
+      </view>
+    </scroll-view>
+    <view class="prog">
+      <text>已掌握 {{knownCount}} / {{total}}</text>
+      <view class="bar"><view class="fill" style="width:{{pct}}%"></view></view>
+      <text class="reset" bindtap="onReset">清空</text>
+    </view>
+  </view>
+
+  <view class="body">
+    <!-- 浏览 -->
+    <block wx:if="{{mode === 'browse'}}">
+      <scroll-view class="toolbar" scroll-x enhanced show-scrollbar="{{false}}">
+        <view class="chip {{maskZh ? 'on' : ''}}" data-k="maskZh" bindtap="onTog">遮住中文</view>
+        <view class="chip {{maskEn ? 'on' : ''}}" data-k="maskEn" bindtap="onTog">遮住英文</view>
+        <view class="chip {{onlyNew ? 'on' : ''}}" data-k="onlyNew" bindtap="onTog">只看未掌握</view>
+        <text class="cnt">{{count}} 条</text>
+      </scroll-view>
+
+      <view wx:if="{{!count}}" class="list empty">没有匹配的术语，换个关键词试试。</view>
+
+      <block wx:for="{{groups}}" wx:for-item="g" wx:key="cat">
+        <view class="sechead">
+          <text class="no">{{g.no}}</text><text class="h2">{{g.zh}}</text><text class="sen">{{g.en}}</text>
+        </view>
+        <view class="list">
+          <view class="row" wx:for="{{g.items}}" wx:key="i">
+            <view class="r1">
+              <view class="zh" data-rev="z{{item.i}}" bindtap="onRev">
+                <view class="mw {{item.mz ? 'mask' : ''}}"><text wx:for="{{item.zh}}" wx:for-item="s" wx:key="k" class="{{s.h ? 'hl' : ''}}">{{s.t}}</text></view>
+              </view>
+              <view class="ib {{item.known ? 'known' : ''}}" data-i="{{item.i}}" bindtap="onKnow">✓</view>
+            </view>
+            <view class="en" data-rev="e{{item.i}}" bindtap="onRev">
+              <view class="mw {{item.me ? 'mask' : ''}}"><text wx:for="{{item.en}}" wx:for-item="s" wx:key="k" class="{{s.h ? 'hl' : ''}}">{{s.t}}</text></view>
+            </view>
+            <view class="note" wx:if="{{item.note.length}}"><text wx:for="{{item.note}}" wx:for-item="s" wx:key="k" class="{{s.h ? 'hl' : ''}}">{{s.t}}</text></view>
+            <view class="code">{{item.code}}</view>
+          </view>
+        </view>
+      </block>
+    </block>
+
+    <!-- 闪卡 -->
+    <block wx:elif="{{mode === 'cards'}}">
+      <scroll-view class="toolbar" scroll-x enhanced show-scrollbar="{{false}}">
+        <view class="chip {{fc.front === 'zh' ? 'on' : ''}}" data-f="zh" bindtap="onFront">正面中文</view>
+        <view class="chip {{fc.front === 'en' ? 'on' : ''}}" data-f="en" bindtap="onFront">正面 English</view>
+        <view class="chip {{onlyNew ? 'on' : ''}}" data-k="onlyNew" bindtap="onTog">只练未掌握</view>
+        <view class="chip" bindtap="onShuffle">打乱顺序</view>
+      </scroll-view>
+
+      <view wx:if="{{fc.empty}}" class="list empty">这一组都掌握了。取消"只练未掌握"或换个章节继续。</view>
+      <block wx:else>
+        <view class="fc-meta">
+          <text>{{fc.catName}} · {{fc.code}}</text>
+          <text>{{fc.idx}} / {{fc.len}}<text wx:if="{{fc.known}}" class="good"> · 已掌握</text></text>
+        </view>
+        <view class="card {{fc.flip ? 'flip' : ''}}" bindtap="onFlip" bindtouchstart="onTs" bindtouchend="onTe">
+          <view class="inner">
+            <view class="face front">
+              <text class="tag">{{fc.dirLabel}}</text>
+              <text class="big {{fc.front === 'en' ? 'en' : ''}}">{{fc.frontText}}</text>
+              <text class="hint">轻点翻面，左右滑动切换</text>
+            </view>
+            <view class="face back">
+              <text class="tag">答案</text>
+              <text class="big {{fc.front === 'zh' ? 'en' : ''}}">{{fc.backText}}</text>
+              <text class="sub">{{fc.frontText}}</text>
+              <text class="desc" wx:if="{{fc.note}}">{{fc.note}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="fc-ctrl">
+          <view class="btn again" data-ok="0" bindtap="onMark" hover-class="tap-active">还不熟</view>
+          <view class="btn ok" data-ok="1" bindtap="onMark" hover-class="tap-active">✓ 记住了</view>
+          <view class="btn" bindtap="onPrev" hover-class="tap-active">上一张</view>
+          <view class="btn" bindtap="onNext" hover-class="tap-active">下一张</view>
+        </view>
+      </block>
+    </block>
+
+    <!-- 自测 -->
+    <block wx:else>
+      <scroll-view class="toolbar" scroll-x enhanced show-scrollbar="{{false}}">
+        <view class="chip {{quiz.dir === 'zh2en' ? 'on' : ''}}" data-d="zh2en" bindtap="onDir">看中文选英文</view>
+        <view class="chip {{quiz.dir === 'en2zh' ? 'on' : ''}}" data-d="en2zh" bindtap="onDir">看英文选中文</view>
+        <text class="cnt">题目来自：{{quiz.scope}}</text>
+      </scroll-view>
+      <view class="qz-score">
+        <view class="stat"><text class="sv">{{quiz.n}}</text><text class="sl">已答</text></view>
+        <view class="stat"><text class="sv">{{quiz.acc}}</text><text class="sl">正确率</text></view>
+        <view class="stat"><text class="sv">{{quiz.streak}}</text><text class="sl">连对</text></view>
+      </view>
+      <view class="qbox">
+        <view class="q-tag">{{quiz.tag}}</view>
+        <view class="q {{quiz.isEn ? 'en' : ''}}">{{quiz.q}}</view>
+        <view class="q-note" wx:if="{{quiz.note}}">{{quiz.note}}</view>
+        <view class="opts">
+          <view wx:for="{{quiz.opts}}" wx:key="i" class="opt {{item.cls}}" data-i="{{item.i}}" bindtap="onPick"
+                hover-class="{{quiz.done ? 'none' : 'opt-hover'}}">
+            <text class="k">{{item.k}}</text><text>{{item.label}}</text>
+          </view>
+        </view>
+        <view class="fb" wx:if="{{quiz.done}}">
+          <block wx:if="{{quiz.right}}"><text class="fb-ok">答对了。</text></block>
+          <block wx:else><text class="fb-no">答错了。</text>正确答案：{{quiz.ansLabel}}，已移出“已掌握”。</block>
+        </view>
+        <view class="btn pri next" bindtap="onNextQ" hover-class="tap-active">{{quiz.done ? '下一题' : '跳过'}}</view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 底部模式切换 -->
+  <view class="tabs">
+    <view class="tab {{mode === 'browse' ? 'on' : ''}}" data-m="browse" bindtap="onTab">浏览</view>
+    <view class="tab {{mode === 'cards' ? 'on' : ''}}" data-m="cards" bindtap="onTab">闪卡</view>
+    <view class="tab {{mode === 'quiz' ? 'on' : ''}}" data-m="quiz" bindtap="onTab">自测</view>
+  </view>
+</view>
