@@ -24,6 +24,11 @@ Page({
     this.d = d;
     this.C = d.items;
     this.known = store.getKnown(d.id);
+    // 进度按卡片 id 存；旧版本存的是下标，加载时迁移
+    if ([...this.known].some(v => typeof v === 'number')) {
+      this.known = new Set([...this.known].map(v => typeof v === 'number' ? (this.C[v] || {}).id : v).filter(Boolean));
+      store.saveKnown(d.id, this.known);
+    }
     this.S = { mode: 'map', idx: 0, peek: {}, qz: null };
     if (['learn', 'quiz'].includes(opt.mode)) this.S.mode = opt.mode;
     if (opt.card) {
@@ -51,10 +56,11 @@ Page({
   // ---------- 渲染 ----------
   render() {
     const S = this.S;
+    const done = this.C.filter(c => this.known.has(c.id)).length;
     const base = {
       mode: S.mode,
-      knownCount: this.known.size,
-      pct: this.C.length ? this.known.size / this.C.length * 100 : 0
+      knownCount: done,
+      pct: this.C.length ? done / this.C.length * 100 : 0
     };
     const view = S.mode === 'learn' ? this.viewLearn() : S.mode === 'quiz' ? this.viewQuiz() : this.viewMap();
     this.setData(Object.assign(base, view));
@@ -64,7 +70,7 @@ Page({
     return {
       list: this.C.map(c => ({
         i: c.i, id: c.id, no: c.no, title: c.title, question: c.question || '',
-        minutes: c.minutes, known: this.known.has(c.i)
+        minutes: c.minutes, known: this.known.has(c.id)
       }))
     };
   },
@@ -77,7 +83,7 @@ Page({
         points: c.points, code: c.code || '', analogy: c.analogy || '', minutes: c.minutes,
         links: c.links.map(l => Object.assign({}, l, { target: registry.findWeek(d.course, l.week) })),
         quiz: c.quiz.map((q, k) => ({ q: q.q, a: q.a, open: !!S.peek[c.i + '-' + k] })),
-        known: this.known.has(c.i), isLast: S.idx === this.C.length - 1
+        known: this.known.has(c.id), isLast: S.idx === this.C.length - 1
       }
     };
   },
@@ -135,14 +141,14 @@ Page({
   onNext() { this.move(1); },
 
   onDone() {
-    const i = this.S.idx;
-    if (this.known.has(i)) {
-      this.known.delete(i);
+    const i = this.S.idx, id = this.C[i].id;
+    if (this.known.has(id)) {
+      this.known.delete(id);
       store.saveKnown(this.d.id, this.known);
       this.render();
       return;
     }
-    this.known.add(i);
+    this.known.add(id);
     store.saveKnown(this.d.id, this.known);
     wx.vibrateShort({ type: 'light' });
     if (i < this.C.length - 1) this.move(1);
@@ -171,7 +177,7 @@ Page({
     else {
       z.bad.push(it);
       // 没答上：对应卡片退回“未学完”
-      if (this.known.delete(it.ci)) store.saveKnown(this.d.id, this.known);
+      if (this.known.delete(this.C[it.ci].id)) store.saveKnown(this.d.id, this.known);
     }
     z.pos++;
     z.shown = false;

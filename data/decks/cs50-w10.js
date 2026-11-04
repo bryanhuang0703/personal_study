@@ -137,7 +137,7 @@ module.exports = {
         },
         {
           "week": 9,
-          "text": "Week 9 把它做成了完整的 Web 应用"
+          "text": "Week 9 的 shows 搜索把同类查找做成了 Web 应用"
         }
       ],
       "quiz": [

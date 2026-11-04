@@ -7,7 +7,11 @@ Page({
   onShow() {
     const decks = registry.list().map(d => {
       const total = d.items.length;
-      const known = store.getKnown(d.id).size;
+      const set = store.getKnown(d.id);
+      // lesson 按卡片 id 计数（兼容旧版下标），glossary 按下标计数
+      const known = d.type === 'lesson'
+        ? d.items.filter((c, i) => set.has(c.id) || set.has(i)).length
+        : set.size;
       return {
         id: d.id, type: d.type, tag: d.tag, title: d.title, subtitle: d.subtitle, desc: d.desc,
         total, known, pct: total ? Math.round(known / total * 100) : 0,

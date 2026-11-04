@@ -89,10 +89,6 @@
         {
           "week": 4,
           "text": "Week 4 的 valgrind 专门查内存错误"
-        },
-        {
-          "week": 6,
-          "text": "Python 同样有 pdb 和 print 调试"
         }
       ],
       "quiz": [
@@ -196,8 +192,8 @@
           "text": "Python 用 sys.argv 和 sys.exit 做同样的事"
         },
         {
-          "week": 9,
-          "text": "Web 程序的 HTTP status code（200、404）是同类思想"
+          "week": 8,
+          "text": "Week 8 的 HTTP status code（200、404）是同类思想"
         }
       ],
       "quiz": [
@@ -232,7 +228,7 @@
         },
         {
           "week": 9,
-          "text": "Week 9 用不可逆的 hash 存储密码，比 Caesar 这类可逆加密安全"
+          "text": "Week 9 的 Finance 作业用不可逆的 hash 存储密码，比 Caesar 这类可逆加密安全"
         }
       ],
       "quiz": [

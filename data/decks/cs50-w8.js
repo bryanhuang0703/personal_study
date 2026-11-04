@@ -40,7 +40,7 @@ module.exports = {
       {
         "week": 10,
         "label": "The End",
-        "note": "把整条链路串起来"
+        "note": "全课复盘"
       }
     ]
   },
@@ -200,7 +200,7 @@ module.exports = {
       "links": [
         {
           "week": 0,
-          "text": "颜色依然是 RGB，用 hex 写成 #ff0000"
+          "text": "颜色依然是 Week 0 讲的 RGB 三个数值"
         },
         {
           "week": 1,

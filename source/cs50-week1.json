@@ -9,11 +9,32 @@
     "title": "这一周在全局里的位置",
     "summary": "Week 1 把 Scratch 的积木换成 C 的文本语法，同时暴露第一个现实约束：计算机的内存有限，数字的精度也有限。",
     "chain": [
-      { "week": 0, "label": "Scratch", "note": "基本结构的直观版本" },
-      { "week": 1, "label": "C", "note": "语法、类型、编译、有限精度", "current": true },
-      { "week": 2, "label": "Arrays", "note": "编译过程拆开看，数据成组存放" },
-      { "week": 4, "label": "Memory", "note": "类型和 string 的真相" },
-      { "week": 6, "label": "Python", "note": "不用编译，不用声明类型" }
+      {
+        "week": 0,
+        "label": "Scratch",
+        "note": "基本结构的直观版本"
+      },
+      {
+        "week": 1,
+        "label": "C",
+        "note": "语法、类型、编译、有限精度",
+        "current": true
+      },
+      {
+        "week": 2,
+        "label": "Arrays",
+        "note": "编译过程拆开看，数据成组存放"
+      },
+      {
+        "week": 4,
+        "label": "Memory",
+        "note": "类型和 string 的真相"
+      },
+      {
+        "week": 6,
+        "label": "Python",
+        "note": "不用编译，不用声明类型"
+      }
     ]
   },
   "cards": [
@@ -30,12 +51,24 @@
       "code": "#include <stdio.h>\n\nint main(void)\n{\n    printf(\"hello, world\\n\");\n}",
       "analogy": "Compiler 是翻译，把你的中文稿译成机器才懂的语言。",
       "links": [
-        { "week": 2, "text": "Week 2 把编译拆成 preprocess、compile、assemble、link 四步" },
-        { "week": 6, "text": "Python 用 interpreter 逐行执行，不需要单独编译" }
+        {
+          "week": 2,
+          "text": "Week 2 把编译拆成 preprocess、compile、assemble、link 四步"
+        },
+        {
+          "week": 6,
+          "text": "Python 用 interpreter 逐行执行，不需要单独编译"
+        }
       ],
       "quiz": [
-        { "q": "修改 hello.c 后直接运行 ./hello，会看到修改吗？", "a": "不会，要先重新 make 编译。" },
-        { "q": "代码质量的三个维度是什么？", "a": "Correctness、design、style。" }
+        {
+          "q": "修改 hello.c 后直接运行 ./hello，会看到修改吗？",
+          "a": "不会，要先重新 make 编译。"
+        },
+        {
+          "q": "代码质量的三个维度是什么？",
+          "a": "Correctness、design、style。"
+        }
       ],
       "minutes": 3
     },
@@ -53,12 +86,24 @@
       "code": "string name = get_string(\"Name? \");\nint age = get_int(\"Age? \");\nprintf(\"%s is %i\\n\", name, age);",
       "analogy": "类型是容器的规格标签：标了“4 字节整数”，就不能往里塞小数。",
       "links": [
-        { "week": 4, "text": "Week 4 揭示 string 其实是 char *，get_string 背后用了 malloc" },
-        { "week": 6, "text": "Python 是动态类型，变量不需要声明类型" }
+        {
+          "week": 4,
+          "text": "Week 4 揭示 string 其实是 char *"
+        },
+        {
+          "week": 6,
+          "text": "Python 是动态类型，变量不需要声明类型"
+        }
       ],
       "quiz": [
-        { "q": "打印 float 应该用哪个 format code？", "a": "%f。" },
-        { "q": "不 #include <cs50.h> 能用 get_int 吗？", "a": "不能，compiler 不知道这个函数的声明。" }
+        {
+          "q": "打印 float 应该用哪个 format code？",
+          "a": "%f。"
+        },
+        {
+          "q": "不 #include <cs50.h> 能用 get_int 吗？",
+          "a": "不能，compiler 不知道这个函数的声明。"
+        }
       ],
       "minutes": 3
     },
@@ -76,12 +121,24 @@
       "code": "int n;\ndo\n{\n    n = get_int(\"Size: \");\n}\nwhile (n < 1);\n\nfor (int i = 0; i < n; i++)\n{\n    printf(\"#\");\n}",
       "analogy": "do-while 像先尝一口再决定要不要加盐。",
       "links": [
-        { "week": 0, "text": "对应 Scratch 的 if、repeat、forever 积木" },
-        { "week": 3, "text": "嵌套循环是 O(n²) 的典型来源，比如 bubble sort" }
+        {
+          "week": 0,
+          "text": "对应 Scratch 的 if、repeat、forever 积木"
+        },
+        {
+          "week": 3,
+          "text": "嵌套循环是 O(n²) 的典型来源，比如 bubble sort"
+        }
       ],
       "quiz": [
-        { "q": "什么时候用 do-while 而不是 while？", "a": "循环体至少要执行一次时，如先获取用户输入再校验。" },
-        { "q": "for (int i = 0; i < 3; i++) 执行几次？", "a": "3 次，i 为 0、1、2。" }
+        {
+          "q": "什么时候用 do-while 而不是 while？",
+          "a": "循环体至少要执行一次时，如先获取用户输入再校验。"
+        },
+        {
+          "q": "for (int i = 0; i < 3; i++) 执行几次？",
+          "a": "3 次，i 为 0、1、2。"
+        }
       ],
       "minutes": 3
     },
@@ -99,12 +156,24 @@
       "code": "void meow(int n);\n\nint main(void)\n{\n    meow(3);\n}\n\nvoid meow(int n)\n{\n    for (int i = 0; i < n; i++)\n        printf(\"meow\\n\");\n}",
       "analogy": "函数像一个按钮，按下就做好一件事，不用每次重新解释怎么做。",
       "links": [
-        { "week": 3, "text": "函数可以调用自己，这就是 recursion" },
-        { "week": 4, "text": "每次函数调用在 stack 上占一个 frame，参数是传值的副本" }
+        {
+          "week": 3,
+          "text": "函数可以调用自己，这就是 recursion"
+        },
+        {
+          "week": 4,
+          "text": "每次函数调用在 stack 上占一个 frame，参数是传值的副本"
+        }
       ],
       "quiz": [
-        { "q": "为什么要在 main 前写 prototype？", "a": "C 从上到下编译，调用前必须知道函数的签名。" },
-        { "q": "在 for 循环里声明的 i，循环外能用吗？", "a": "不能，它的 scope 只在循环内。" }
+        {
+          "q": "为什么要在 main 前写 prototype？",
+          "a": "C 从上到下编译，调用前必须知道函数的签名。"
+        },
+        {
+          "q": "在 for 循环里声明的 i，循环外能用吗？",
+          "a": "不能，它的 scope 只在循环内。"
+        }
       ],
       "minutes": 3
     },
@@ -122,12 +191,24 @@
       "code": "float x = 1.0 / 3;\nprintf(\"%.20f\\n\", x);\n// 0.33333334326744079590",
       "analogy": "汽车里程表只有 6 位，跑到 999999 之后会归零。",
       "links": [
-        { "week": 0, "text": "n 个 bit 只能表示 2ⁿ 个值，这是 overflow 的根源" },
-        { "week": 6, "text": "Python 的 int 可以任意大，但 float 一样有精度误差" }
+        {
+          "week": 0,
+          "text": "n 个 bit 只能表示 2ⁿ 个值，这是 overflow 的根源"
+        },
+        {
+          "week": 6,
+          "text": "Python 同样存在浮点数精度误差"
+        }
       ],
       "quiz": [
-        { "q": "int x = 7 / 2; x 是多少？", "a": "3，整数除法会截断小数部分。" },
-        { "q": "为什么金额计算不宜直接用 float？", "a": "浮点数有表示误差，累计后会出现分厘偏差，通常用整数存“分”。" }
+        {
+          "q": "int x = 7 / 2; x 是多少？",
+          "a": "3，整数除法会截断小数部分。"
+        },
+        {
+          "q": "为什么金额计算不宜直接用 float？",
+          "a": "浮点数有表示误差，累计后会出现分厘偏差，通常用整数存“分”。"
+        }
       ],
       "minutes": 3
     }

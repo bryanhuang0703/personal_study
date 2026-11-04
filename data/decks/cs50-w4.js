@@ -96,10 +96,6 @@ module.exports = {
         {
           "week": 5,
           "text": "链表每个节点里有一个 next 指针，把不连续的内存串起来"
-        },
-        {
-          "week": 6,
-          "text": "Python 变量本质上也是引用，只是不让你直接看到地址"
         }
       ],
       "quiz": [
@@ -134,7 +130,7 @@ module.exports = {
         },
         {
           "week": 6,
-          "text": "Python 的 == 比较内容，is 才比较是否同一个对象"
+          "text": "Python 里直接用 == 就能比较字符串内容"
         }
       ],
       "quiz": [
@@ -169,7 +165,7 @@ module.exports = {
         },
         {
           "week": 6,
-          "text": "Python 里 b = a 对 list 也是共享引用，要复制得用 a.copy()；回收交给 garbage collector"
+          "text": "Python 自己管理内存，不需要手动 malloc 和 free"
         }
       ],
       "quiz": [
@@ -201,10 +197,6 @@ module.exports = {
         {
           "week": 3,
           "text": "递归的每一层就是 stack 上的一个 frame，没有 base case 会把 stack 撑爆"
-        },
-        {
-          "week": 6,
-          "text": "Python 传参传的是对象引用：可变对象在函数里能被改动，重新赋值则不影响外面"
         }
       ],
       "quiz": [
@@ -240,7 +232,7 @@ module.exports = {
         },
         {
           "week": 6,
-          "text": "Python 越界会抛 IndexError，而不是悄悄写坏内存"
+          "text": "Python 出错时会抛出 exception（如 ValueError），可以用 try/except 处理"
         }
       ],
       "quiz": [
@@ -272,10 +264,6 @@ module.exports = {
         {
           "week": 0,
           "text": "Week 0 说过一切皆二进制，这里落到了具体的文件格式"
-        },
-        {
-          "week": 9,
-          "text": "Web 服务器发送图片，本质上也是把文件字节写进网络响应"
         }
       ],
       "quiz": [

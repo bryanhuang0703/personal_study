@@ -127,11 +127,11 @@ module.exports = {
       "links": [
         {
           "week": 2,
-          "text": "Week 2 的 Caesar 加密就是对字符的数字做加减"
+          "text": "Week 2 作业里的 Caesar 加密，就是对字符的数字做加减"
         },
         {
           "week": 4,
-          "text": "Week 4 读写 BMP 和 JPEG，直接操作这些像素字节"
+          "text": "Week 4 直接读写 BMP 图片的像素字节"
         }
       ],
       "quiz": [

@@ -40,7 +40,13 @@ node tools/html2deck.js source/xxx.html xxx 术语
 node tools/cs50-json2deck.js source/cs50-week5.json
 ```
 
-生成 `data/decks/cs50-w5.js` 并注册。同一课程（`course` 相同）的各周会自动互相链接：概览里的周时间线、卡片里的「前后联系」点击即跳到对应周，没加入的周会提示。
+生成 `data/decks/cs50-w5.js` 并注册。整包更新（如 `cs50x-2026-cards.zip` 的 `data/` 下 11 份 JSON）时，先覆盖到 `source/cs50-week0.json` … `cs50-week10.json`，再批量转换：
+
+```bash
+for f in source/cs50-week*.json; do node tools/cs50-json2deck.js "$f"; done
+```
+
+学习进度按卡片 `id` 存储：修改卡片内容不要改 `id`，新增卡片要用新 `id`。同一课程（`course` 相同）的各周会自动互相链接：概览里的周时间线、卡片里的「前后联系」点击即跳到对应周，没加入的周会提示。
 
 **格式不同的 HTML**（比如 `source/ta-kit-glossary.html`）：发给 Claude 转换即可。术语页支持的可选字段：
 

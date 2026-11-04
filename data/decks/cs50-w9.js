@@ -95,7 +95,7 @@ module.exports = {
       "links": [
         {
           "week": 8,
-          "text": "URL 路径和 GET/POST 正是 Week 8 讲的 HTTP request 组成部分"
+          "text": "URL 和 GET 请求是 Week 8 讲的 HTTP 内容"
         },
         {
           "week": 1,
@@ -204,7 +204,7 @@ module.exports = {
         },
         {
           "week": 2,
-          "text": "Caesar 是可逆加密；密码要用不可逆的 hash 存储，更安全"
+          "text": "Week 2 作业里的 Caesar 是可逆加密；密码要用不可逆的 hash 存储，更安全"
         }
       ],
       "quiz": [
@@ -235,11 +235,7 @@ module.exports = {
       "links": [
         {
           "week": 8,
-          "text": "前端 fetch 加 DOM 操作是 Week 8 JavaScript 的延续"
-        },
-        {
-          "week": 10,
-          "text": "Week 10 复盘：一次请求从浏览器到数据库再回来的完整链路"
+          "text": "用 JavaScript 操作 DOM 是 Week 8 的内容"
         }
       ],
       "quiz": [

@@ -160,11 +160,7 @@ module.exports = {
       "links": [
         {
           "week": 1,
-          "text": "两层嵌套循环是 O(n²) 的典型信号"
-        },
-        {
-          "week": 6,
-          "text": "Python 的 sorted() 用的是 Timsort，O(n log n)"
+          "text": "Week 1 的 Mario 网格就用了两层嵌套循环，这是 O(n²) 的典型信号"
         }
       ],
       "quiz": [

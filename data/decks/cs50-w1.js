@@ -95,7 +95,7 @@ module.exports = {
       "links": [
         {
           "week": 4,
-          "text": "Week 4 揭示 string 其实是 char *，get_string 背后用了 malloc"
+          "text": "Week 4 揭示 string 其实是 char *"
         },
         {
           "week": 6,
@@ -204,7 +204,7 @@ module.exports = {
         },
         {
           "week": 6,
-          "text": "Python 的 int 可以任意大，但 float 一样有精度误差"
+          "text": "Python 同样存在浮点数精度误差"
         }
       ],
       "quiz": [
