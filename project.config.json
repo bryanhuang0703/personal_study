@@ -1,0 +1,21 @@
+{
+  "description": "个人学习工具",
+  "appid": "wxab5ae284768f88ca",
+  "projectname": "personal_study",
+  "compileType": "miniprogram",
+  "libVersion": "3.0.0",
+  "packOptions": {
+    "ignore": [
+      { "type": "folder", "value": "source" },
+      { "type": "folder", "value": "tools" },
+      { "type": "file", "value": "README.md" }
+    ]
+  },
+  "setting": {
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "urlCheck": true
+  }
+}

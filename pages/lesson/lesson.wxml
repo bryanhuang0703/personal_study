@@ -1,0 +1,134 @@
+<view class="page {{mode === 'learn' ? 'has-ctrl' : ''}}">
+  <view class="prog">
+    <text>已学完 {{knownCount}} / {{total}}</text>
+    <view class="bar"><view class="fill" style="width:{{pct}}%"></view></view>
+  </view>
+
+  <!-- 概览 -->
+  <block wx:if="{{mode === 'map'}}">
+    <view class="hero">
+      <view class="eyebrow">{{head.eyebrow}}</view>
+      <view class="h1">{{head.title}}</view>
+    </view>
+
+    <view class="panel" wx:if="{{chain.length}}">
+      <view class="lab">{{head.mapTitle}}</view>
+      <view class="sum">{{head.summary}}</view>
+      <view class="chain">
+        <view wx:for="{{chain}}" wx:key="week" class="node {{item.current ? 'cur' : ''}} {{item.target ? 'go' : ''}}"
+              data-target="{{item.target}}" data-week="{{item.week}}" bindtap="onGo">
+          <view class="dot"></view>
+          <view class="nbody">
+            <view class="nw">Week {{item.week}} · {{item.label}}<text wx:if="{{item.target}}" class="arrow"> ›</text></view>
+            <view class="nn">{{item.note}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="sechead">{{total}} 张卡片 · 约 {{head.totalMin}} 分钟</view>
+    <view class="list">
+      <view class="item" wx:for="{{list}}" wx:key="id" data-i="{{item.i}}" bindtap="onOpen" hover-class="tap-active">
+        <text class="ino">{{item.no}}</text>
+        <view class="ibody">
+          <view class="ititle">{{item.title}}</view>
+          <view class="iq" wx:if="{{item.question}}">{{item.question}}</view>
+        </view>
+        <text wx:if="{{item.known}}" class="imeta good">✓</text>
+        <text wx:else class="imeta">{{item.minutes}} 分钟</text>
+      </view>
+    </view>
+
+    <view class="lic" wx:if="{{head.license}}">{{head.license}}</view>
+    <view class="lic src" wx:if="{{head.source}}" user-select>{{head.source}}</view>
+  </block>
+
+  <!-- 学习 -->
+  <block wx:elif="{{mode === 'learn'}}">
+    <view class="lesson" bindtouchstart="onTs" bindtouchend="onTe">
+      <view class="l-meta"><text>{{c.no}} / {{total}}</text><text>约 {{c.minutes}} 分钟<text wx:if="{{c.known}}" class="good"> · 已学完</text></text></view>
+      <view class="l-title">{{c.title}}</view>
+      <view class="l-q" wx:if="{{c.question}}">{{c.question}}</view>
+
+      <view class="concl">
+        <view class="lab acc">结论</view>
+        <view>{{c.conclusion}}</view>
+      </view>
+
+      <block wx:if="{{c.points.length}}">
+        <view class="lab sec">要点</view>
+        <view class="pts">
+          <view class="pt" wx:for="{{c.points}}" wx:key="*this">{{item}}</view>
+        </view>
+      </block>
+
+      <block wx:if="{{c.code}}">
+        <view class="lab sec">代码</view>
+        <scroll-view class="code-wrap" scroll-x enhanced show-scrollbar="{{false}}">
+          <text class="code" space="nbsp" user-select>{{c.code}}</text>
+        </scroll-view>
+      </block>
+
+      <view class="analogy" wx:if="{{c.analogy}}">
+        <view class="lab">类比</view>
+        <view>{{c.analogy}}</view>
+      </view>
+
+      <block wx:if="{{c.links.length}}">
+        <view class="lab sec">前后联系</view>
+        <view wx:for="{{c.links}}" wx:key="text" class="link {{item.target ? 'go' : ''}}"
+              data-target="{{item.target}}" data-week="{{item.week}}" bindtap="onGo">
+          <text class="wk">W{{item.week}}</text>
+          <text class="lt">{{item.text}}</text>
+        </view>
+      </block>
+
+      <block wx:if="{{c.quiz.length}}">
+        <view class="lab sec">想一想</view>
+        <view wx:for="{{c.quiz}}" wx:key="q" class="rq" data-k="{{index}}" bindtap="onPeek">
+          <view class="rq-q">{{item.q}}</view>
+          <view wx:if="{{item.open}}" class="rq-a">{{item.a}}</view>
+          <view wx:else class="rq-hint">点击看答案</view>
+        </view>
+      </block>
+    </view>
+
+    <view class="l-ctrl">
+      <view class="btn" bindtap="onPrev" hover-class="tap-active">上一张</view>
+      <view class="btn main {{c.known ? 'ok' : 'pri'}}" bindtap="onDone" hover-class="tap-active">{{c.known ? '✓ 已学完' : (c.isLast ? '学完' : '学完，下一张')}}</view>
+      <view class="btn" bindtap="onNext" hover-class="tap-active">下一张</view>
+    </view>
+  </block>
+
+  <!-- 自测 -->
+  <block wx:elif="{{mode === 'quiz'}}">
+    <view wx:if="{{qz.done}}" class="qbox">
+      <view class="eyebrow">本轮完成</view>
+      <view class="score">{{qz.ok}} / {{qz.total}}</view>
+      <view class="muted">{{qz.badCount ? '有 ' + qz.badCount + ' 题没答上，对应卡片已退回“未学完”。' : '全部答上了。'}}</view>
+      <view class="q-ctrl {{qz.badCount ? '' : 'solo'}}">
+        <view class="btn" wx:if="{{qz.badCount}}" bindtap="onRedo" hover-class="tap-active">重做没答上的</view>
+        <view class="btn pri" bindtap="onRestart" hover-class="tap-active">再来一轮</view>
+      </view>
+    </view>
+    <view wx:else class="qbox">
+      <view class="bar"><view class="fill" style="width:{{qz.pct}}%"></view></view>
+      <view class="q-tag">{{qz.pos}} / {{qz.total}} · {{qz.cardTitle}}</view>
+      <view class="q">{{qz.q}}</view>
+      <view wx:if="{{qz.shown}}" class="ans">
+        <view class="lab acc">参考答案</view>
+        <view>{{qz.a}}</view>
+      </view>
+      <view wx:if="{{!qz.shown}}" class="btn pri reveal" bindtap="onReveal" hover-class="tap-active">显示答案</view>
+      <view wx:else class="q-ctrl">
+        <view class="btn again" data-ok="0" bindtap="onGrade" hover-class="tap-active">没答上</view>
+        <view class="btn ok" data-ok="1" bindtap="onGrade" hover-class="tap-active">答上了</view>
+      </view>
+      <view class="to-card" bindtap="onToCard">回到这张卡片 ›</view>
+    </view>
+  </block>
+
+  <view class="tabs">
+    <view wx:for="{{tabs}}" wx:key="m" class="tab {{mode === item.m ? 'on' : ''}}" data-m="{{item.m}}" bindtap="onTab">{{item.name}}</view>
+  </view>
+</view>

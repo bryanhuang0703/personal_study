@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="description" content="机器人与具身智能行业中英文术语，含数据采集设备与机器人本体：浏览、闪卡、自测">
+<title>机器人行业术语手册</title>
+<style>
+:root{
+  /* layout: fixed left rail of chapters + main workspace with three modes (浏览 / 闪卡 / 自测) */
+  --bg:#eef1f4; --panel:#ffffff; --ink:#15202b; --muted:#5d6b78; --line:#d5dce3;
+  --accent:#e0571f; --accent-soft:#fbe6dc; --steel:#2f5d7c; --steel-soft:#dde8f0;
+  --good:#2f8a5b; --good-soft:#dcf0e4; --warn:#b7791f;
+  --hover:#e8eff5;
+  --display:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans SC","MiSans","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans SC","MiSans","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+  --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f151b; --panel:#17212a; --ink:#e6ecf1; --muted:#93a3b1; --line:#2a3743;
+    --accent:#ff7a3d; --accent-soft:#3a2418; --steel:#7fb3d6; --steel-soft:#1d3142;
+    --good:#5cc48d; --good-soft:#193326; --warn:#e0a84a; --hover:#1a2834; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f151b; --panel:#17212a; --ink:#e6ecf1; --muted:#93a3b1; --line:#2a3743;
+  --accent:#ff7a3d; --accent-soft:#3a2418; --steel:#7fb3d6; --steel-soft:#1d3142;
+  --good:#5cc48d; --good-soft:#193326; --warn:#e0a84a; --hover:#1a2834; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--body);}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,.row:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100%}
+aside{background:var(--panel);border-right:1px solid var(--line);padding:22px 14px;position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column;gap:18px}
+.brand{padding:0 8px}
+.brand h1{font:700 22px/1.15 var(--display);margin:0;letter-spacing:.2px;text-wrap:balance}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:12.5px}
+.chapters{display:flex;flex-direction:column;gap:2px}
+.chap{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:6px;border:0;background:none;text-align:left;padding:8px;border-radius:6px}
+.chap:hover{background:var(--steel-soft)}
+.chap.on{background:var(--ink);color:var(--panel)}
+.chap .no{font:500 11px var(--mono);color:var(--muted)}
+.chap.on .no{color:inherit;opacity:.7}
+.chap .ct{font:12px var(--mono);color:var(--muted)}
+.chap.on .ct{color:inherit;opacity:.75}
+.prog{margin-top:auto;padding:12px 8px 0;border-top:1px solid var(--line)}
+.prog .lbl{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted)}
+.prog .bar{height:6px;background:var(--line);border-radius:3px;margin-top:6px;overflow:hidden}
+.prog .bar i{display:block;height:100%;background:var(--good);width:0;transition:width .3s}
+.prog .reset{margin-top:10px;background:none;border:0;padding:0;color:var(--muted);font-size:12px;text-decoration:underline}
+
+main{padding:22px 32px 48px;min-width:0}
+.top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.tabs{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:3px}
+.tab{border:0;background:none;padding:7px 16px;border-radius:6px;font-weight:500}
+.tab.on{background:var(--accent);color:#fff}
+.search{flex:1;min-width:220px;max-width:420px;position:relative}
+.search input{width:100%;padding:9px 12px 9px 34px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);font:inherit}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.kbd{font:11px var(--mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;color:var(--muted)}
+
+.sechead{display:flex;align-items:baseline;gap:12px;margin:26px 0 10px}
+.sechead:first-child{margin-top:0}
+.sechead .no{font:500 12px var(--mono);color:var(--accent)}
+.sechead h2{font:600 20px var(--display);margin:0}
+.sechead .en{color:var(--muted);font-size:13px}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;font-size:13px;color:var(--muted)}
+.chip{border:1px solid var(--line);background:var(--panel);padding:5px 11px;border-radius:999px;font-size:13px}
+.chip.on{border-color:var(--steel);background:var(--steel-soft);color:var(--steel);font-weight:500}
+
+.list{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.row{display:grid;grid-template-columns:52px minmax(120px,170px) minmax(180px,280px) 1fr 76px;gap:14px;align-items:start;padding:12px 16px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+@media (hover:hover){.row:hover{background:var(--hover)}}
+body{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+.row .id{font:12px var(--mono);color:var(--muted);padding-top:3px}
+.row .zh{font-weight:700;font-size:16px}
+.row .en{font-family:var(--body);font-weight:500;color:var(--steel)}
+.row .note{color:var(--muted);font-size:14px}
+.row .act{display:flex;gap:4px;justify-content:flex-end}
+.ib{width:30px;height:30px;border:1px solid var(--line);background:var(--panel);border-radius:6px;display:grid;place-items:center;color:var(--muted)}
+.ib:hover{color:var(--ink);border-color:var(--muted)}
+.ib.known{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+.mask{background:var(--line);color:transparent;border-radius:4px;cursor:pointer;user-select:none;transition:all .15s}
+.mask:hover{background:var(--muted)}
+.mask.rev{background:none;color:inherit}
+mark{background:var(--accent-soft);color:inherit;border-radius:2px;padding:0 1px}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+
+/* flashcards */
+.fc-wrap{max-width:720px;margin:0 auto}
+.fc-meta{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--muted);margin-bottom:10px}
+.card{perspective:1400px;height:340px;cursor:pointer}
+.card-inner{position:relative;height:100%;transition:transform .5s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
+.card.flip .card-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:28px 36px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:10px;box-shadow:0 10px 30px -18px rgba(20,32,43,.35)}
+.face::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;border-radius:14px 0 0 14px;background:var(--accent)}
+.face.back{transform:rotateY(180deg)}
+.face.back::before{background:var(--steel)}
+.face .tag{position:absolute;top:16px;left:26px;font:12px var(--mono);color:var(--muted)}
+.face .hint{position:absolute;bottom:14px;font-size:12px;color:var(--muted)}
+.face .big{font:700 40px/1.2 var(--display);text-wrap:balance}
+.face .big.en{color:var(--steel);font-size:34px}
+.face .sub{font-size:20px;font-weight:500}
+.face .desc{color:var(--muted);max-width:52ch}
+.fc-ctrl{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--panel);padding:9px 18px;border-radius:8px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--muted)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ok{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+.btn.again{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.keys{text-align:center;margin-top:14px;font-size:12px;color:var(--muted)}
+
+/* quiz */
+.qz{max-width:720px;margin:0 auto}
+.qz-score{display:flex;gap:10px;margin-bottom:14px}
+.stat{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.stat b{display:block;font:600 24px var(--display);font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted)}
+.qbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px 28px}
+.qbox .q-tag{font:12px var(--mono);color:var(--muted)}
+.qbox .q{font:700 30px/1.25 var(--display);margin:8px 0 4px}
+.qbox .q.en{color:var(--steel)}
+.qbox .q-note{color:var(--muted);font-size:14px;min-height:22px}
+.opts{display:grid;gap:8px;margin-top:18px}
+.opt{text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:11px 14px;display:flex;gap:12px;align-items:center}
+.opt:hover:not(:disabled){border-color:var(--steel)}
+.opt .k{font:12px var(--mono);color:var(--muted);width:18px}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong{border-color:var(--accent);background:var(--accent-soft)}
+.opt:disabled{cursor:default}
+.fb{margin-top:14px;font-size:14px;min-height:22px}
+.fb .ok{color:var(--good);font-weight:600}
+.fb .no{color:var(--accent);font-weight:600}
+
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  html,body{overflow-x:hidden}
+  aside{min-width:0;position:sticky;top:0;z-index:5;height:auto;overflow:visible;padding:calc(10px + env(safe-area-inset-top)) 0 10px;border-right:0;border-bottom:1px solid var(--line);gap:8px}
+  .brand{padding:0 16px}
+  .brand h1{font-size:18px}
+  .brand p{display:none}
+  .chapters{flex-direction:row;flex-wrap:nowrap;overflow-x:auto;padding:0 16px;gap:6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .chapters::-webkit-scrollbar{display:none}
+  .chap{flex:none;display:flex;gap:6px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;font-size:14px}
+  .chap.on{border-color:var(--ink)}
+  .chap .no{display:none}
+  .prog{display:flex;align-items:center;gap:10px;margin:0 16px;padding:0;border:0}
+  .prog .lbl{gap:6px;flex:none;font-size:12px}
+  .prog .bar{flex:1;margin:0;height:4px}
+  .prog .reset{margin:0;flex:none}
+  main{padding:14px 16px calc(80px + env(safe-area-inset-bottom))}
+  .top{margin-bottom:12px}
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:10;border:0;border-top:1px solid var(--line);border-radius:0;padding:6px 10px calc(6px + env(safe-area-inset-bottom));gap:6px}
+  .tab{flex:1;padding:10px 0;font-size:15px}
+  .search{max-width:none;min-width:0}
+  .search input{font-size:16px;padding:10px 12px 10px 34px}
+  .toolbar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px 12px;padding:0 16px;white-space:nowrap}
+  .toolbar::-webkit-scrollbar{display:none}
+  .toolbar>span:last-child{margin-left:12px!important}
+  .chip{flex:none;padding:6px 12px}
+  .sechead{margin:20px 0 8px}
+  .sechead h2{font-size:18px}
+  .row{grid-template-columns:1fr auto;gap:4px 12px;padding:12px 14px}
+  .row .id{display:none}
+  .row .zh{grid-column:1;grid-row:1;font-size:17px}
+  .row .act{grid-column:2;grid-row:1}
+  .row .en,.row .note{grid-column:1/-1}
+  .row .en{font-size:15px}
+  .ib{width:36px;height:36px}
+  .fc-meta{margin-bottom:8px}
+  .card{height:min(40vh,300px)}
+  .face{padding:22px 20px}
+  .face .tag{left:20px}
+  .face .big{font-size:32px}
+  .face .big.en{font-size:25px}
+  .face .sub{font-size:17px}
+  .face .desc{font-size:14px}
+  .fc-ctrl{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:14px}
+  .fc-ctrl .btn{justify-content:center;padding:12px 6px;grid-column:span 2}
+  .fc-ctrl .again,.fc-ctrl .ok{grid-column:span 3;padding:14px 6px;font-size:16px}
+  .fc-ctrl .again{order:-2}.fc-ctrl .ok{order:-1}
+  .qz .fc-ctrl{grid-template-columns:1fr 1fr}
+  .qz .fc-ctrl .btn{grid-column:span 1}
+  .stat{padding:8px 12px}
+  .stat b{font-size:20px}
+  .qbox{padding:18px 16px}
+  .qbox .q{font-size:26px}
+  .qbox .q.en{font-size:22px}
+  .opt{padding:13px 14px;font-size:15px}
+}
+@media (hover:none){.keys{display:none}}
+.nospeech [data-say]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <h1>机器人行业术语手册</h1>
+      <p>Robotics & Embodied AI Glossary</p>
+    </div>
+    <nav class="chapters" id="chapters" aria-label="章节"></nav>
+    <div class="prog">
+      <div class="lbl"><span>已掌握</span><span id="progTxt">0 / 0</span></div>
+      <div class="bar"><i id="progBar"></i></div>
+      <button class="reset" id="resetBtn" type="button">清空掌握记录</button>
+    </div>
+  </aside>
+  <main>
+    <div class="top">
+      <div class="tabs" role="tablist">
+        <button class="tab on" data-mode="browse" type="button">浏览</button>
+        <button class="tab" data-mode="cards" type="button">闪卡</button>
+        <button class="tab" data-mode="quiz" type="button">自测</button>
+      </div>
+      <label class="search" for="q">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="搜索中文、English 或说明  ( / )" autocomplete="off">
+      </label>
+    </div>
+    <section id="view"></section>
+  </main>
+</div>
+
+<script>
+const CATS=[
+ ["宏观概念","Big Picture"],["形态与规格","Form Factors & Specs"],["核心部件与执行器","Components & Actuators"],
+ ["感知与定位","Sensing & Localization"],["模型与控制","Models & Control"],["采集路线与设备","Data Collection"],
+ ["数据处理与数据资产","Data Processing & Assets"],["训练与部署","Training & Deployment"],["商业与量产","Business & Production"],["数据业务","Data Business"]
+];
+const RAW=[
+[0,"具身智能","Embodied AI / Embodied Intelligence","有身体、能感知并作用于物理世界的 AI"],
+[0,"物理 AI","Physical AI","Nvidia 带火的说法，和具身智能基本同义"],
+[0,"通用机器人","General-purpose Robot","一套系统做多种任务，与专用机器人相对"],
+[0,"本体","Robot Body / Embodiment / Hardware","机器人的物理硬件整机，与“大脑”模型相对。“本体厂商”就是整机厂"],
+[0,"大脑 / 小脑","Brain / Cerebellum (High-level Planner / Low-level Controller)","大脑负责理解、规划和决策；小脑负责运动控制和平衡"],
+[0,"跨本体","Cross-embodiment","同一个模型或同一份数据可以用于不同构型的机器人硬件"],
+[0,"具身 AGI","Physical AGI","行业的终极叙事"],
+
+[1,"人形机器人","Humanoid","双足、双臂、头部的类人形态，全尺寸或小尺寸，如 Optimus、Figure、智元远征"],
+[1,"轮式人形 / 轮式双臂","Wheeled Humanoid / Mobile Manipulator","轮式底盘加上半身双臂，更稳、更便宜，商业化更快（Dyna、银河通用、Genesis Eno、智元精灵 G2）"],
+[1,"轮足机器人","Wheel-legged Robot","腿的末端装轮子，兼顾越障和速度"],
+[1,"足式机器人","Legged Robot","四足或双足行走，如宇树四足、ANYmal"],
+[1,"四足机器人","Quadruped / Robot Dog","宇树 Go 系列、Boston Dynamics Spot"],
+[1,"复合机器人","Mobile Manipulator / AMR + Arm","移动底盘加机械臂，工业里常见"],
+[1,"协作机器人","Cobot (Collaborative Robot)","能和人在同一空间安全协作的机械臂，如 UR、Franka，常作研究和采集平台"],
+[1,"机械臂","Robotic Arm / Manipulator","6 轴、7 轴等"],
+[1,"双臂机器人","Bimanual / Dual-arm Robot","双手配合操作，是家务和装配任务的常见配置"],
+[1,"陪伴机器人","Companion Robot","情感陪伴、老人和儿童看护"],
+[1,"服务机器人","Service Robot","餐饮、酒店、清洁、配送"],
+[1,"外骨骼","Exoskeleton","穿戴式助力或康复设备；在数据采集中也指穿在手臂或手上、测关节角并可提供力反馈的机械结构"],
+[1,"AMR / AGV","Autonomous Mobile Robot / Automated Guided Vehicle","仓储物流用的移动机器人"],
+[1,"自由度","DoF (Degrees of Freedom)","可独立运动的关节数量。人手大约 20 多个，人形整机通常 30 到 50 个以上"],
+[1,"有效载荷","Payload","末端可稳定搬运的重量"],
+[1,"工作空间","Workspace / Reach","末端可到达的空间范围"],
+
+[2,"灵巧手","Dexterous Hand","多指多自由度的手，单手常见 6 到 20+ 自由度，被认为是最难的部件"],
+[2,"夹爪","Gripper / Parallel-jaw Gripper","二指平行开合或吸盘，结构简单、便宜可靠，对应 UMI 采集"],
+[2,"末端执行器","End Effector","机械臂末端的工具统称，包括夹爪、灵巧手、吸盘等"],
+[2,"主动 / 欠驱动","Fully-actuated / Underactuated","每个关节都有电机，或电机数少于关节数、靠连杆联动"],
+[2,"腱绳驱动","Tendon-driven","灵巧手的一种传动方式，用线缆传动手指，电机可后置到前臂"],
+[2,"关节模组","Actuator / Joint Module","电机 + 减速器 + 编码器 + 驱动器集成的一体化关节，是 BOM 最大项"],
+[2,"旋转执行器","Rotary Actuator","输出转动，用于肩、肘、髋等关节"],
+[2,"线性执行器","Linear Actuator","输出直线运动，常用行星滚柱丝杠，用于腿部等大力矩位置"],
+[2,"谐波减速器","Harmonic Drive / Strain Wave Gear","关节精密减速器，大减速比、无回差，常用于上肢关节"],
+[2,"行星减速器","Planetary Gearbox","成本更低，承载大、可反向驱动，常用于下肢和准直驱关节"],
+[2,"行星滚柱丝杠","Planetary Roller Screw","线性执行器的关键部件，精度和寿命高、成本较高，卡脖子环节之一"],
+[2,"准直驱","QDD (Quasi-Direct Drive)","低减速比设计，可反向驱动、抗冲击，常见于足式机器人"],
+[2,"可反驱","Backdrivable","外力可以推动关节反转，利于安全和力控"],
+[2,"无框力矩电机","Frameless Torque Motor","无外壳的电机定转子，直接集成进关节，功率密度高"],
+[2,"空心杯电机","Coreless Motor","体积小、响应快，灵巧手手指常用"],
+[2,"关节力矩传感","Joint Torque Sensing","在关节内测量输出力矩，支持柔顺控制"],
+[2,"电池包 / BMS","Battery Pack / Battery Management System","整机供电与管理，决定续航"],
+
+[3,"本体感知","Proprioception","机器人对自身关节位置、速度、力矩的感知"],
+[3,"6D 位姿","6-DoF Pose","三维位置加三维姿态，描述末端或手在空间中的状态"],
+[3,"视觉 SLAM / VIO","Visual SLAM / Visual-Inertial Odometry","用相机和 IMU 同时定位和建图，UMI 用它还原夹爪轨迹"],
+[3,"IMU","Inertial Measurement Unit","惯性测量单元，测加速度和角速度，辅助定位"],
+[3,"外部追踪","External Tracking","用基站或光学系统定位设备，如 Vive Tracker、OptiTrack，精度高但需要布场"],
+[3,"编码器","Encoder","测关节转角，主从臂和手套靠它读取人的动作"],
+[3,"标定","Calibration","确定相机内外参、传感器之间的相对位置，每台设备都要做"],
+[3,"时间同步","Time Synchronization","让多路传感器时间戳对齐，商用设备常标称亚毫秒级"],
+[3,"ArUco / AprilTag","Fiducial Marker","印刷的二维标记，用于定位或测量夹爪开合"],
+[3,"深度相机","Depth Camera / RGB-D / ToF (Time-of-Flight)","同时输出彩色图像和深度的相机，用于 3D 视觉；整机头部主视觉常用双目或 RGB-D"],
+[3,"双目相机","Stereo Camera","两个相机获取深度信息"],
+[3,"鱼眼镜头","Fisheye Lens","超广角镜头，扩大视野，UMI 用 GoPro Max Lens Mod"],
+[3,"激光雷达","LiDAR","环境感知，用于导航建图和避障"],
+[3,"六维力传感器","6-axis Force/Torque (F/T) Sensor","测末端受到的力和力矩，常装在腕部或脚踝"],
+[3,"触觉传感器 / 电子皮肤","Tactile Sensor / E-skin","测接触压力分布，含电阻式和视触觉（VBTS，用相机看弹性体形变）；电子皮肤是覆盖在手部或身体表面的触觉阵列"],
+
+[4,"机器人基础模型 / 具身基座模型","RFM (Robot Foundation Model)","用大规模多源数据预训练的通用机器人模型，如 PI 的 π0、Dyna-1、GENE、GR00T"],
+[4,"视觉-语言-动作模型","VLA (Vision-Language-Action)","当前主流架构，输入画面和语言指令，直接输出动作，如 π0、GO-1、GEN-0"],
+[4,"世界模型","World Model","预测物理世界接下来会怎么变化，用于规划或生成训练数据"],
+[4,"世界-动作模型","WAM (World-Action Model)","在视频生成模型基础上做动作（Dyna-2）"],
+[4,"端到端","End-to-end","从感知直接到动作，中间不拆模块"],
+[4,"分层架构 / 快慢系统","Hierarchical / System 1 + System 2","慢系统做推理规划，快系统做实时控制（Figure Helix、GR00T）"],
+[4,"策略","Policy","从观测到动作的映射，即模型的输出行为"],
+[4,"模仿学习","Imitation Learning / Behavior Cloning","从人类示教数据中学习策略，如 ACT、Diffusion Policy"],
+[4,"强化学习","RL (Reinforcement Learning)","通过试错和奖励学习，多在仿真中训练运动控制"],
+[4,"扩散策略","Diffusion Policy","用扩散模型生成动作序列"],
+[4,"动作分块","Action Chunking","一次预测一段动作，动作更平滑"],
+[4,"泛化","Generalization","在新物体、新场景、新任务中仍能完成任务的能力"],
+[4,"规模定律","Scaling Law","数据量和模型规模增加，性能可预测地提升"],
+[4,"运动控制","Locomotion / Motion Control","走、跑、跳、平衡和全身协调，常用 MPC 和强化学习"],
+[4,"操作","Manipulation","用手或臂处理物体，难度高于运动控制"],
+[4,"移动操作","Loco-manipulation / Mobile Manipulation","移动与操作结合的任务"],
+[4,"全身控制","WBC (Whole-Body Control)","同时协调腿、腰、臂的关节，让运动和操作协同，实现边走边操作"],
+[4,"柔顺控制 / 阻抗控制","Compliance / Impedance Control","让机器人像弹簧一样对外力做出响应，利于接触类任务"],
+
+[5,"真机数据","Real-robot Data","质量最高，最贵"],
+[5,"遥操作","Teleoperation","人通过主端设备实时操控真实机器人，由机器人自身传感器记录数据，质量最高、成本最高"],
+[5,"无本体数据 / 无本体采集","Robot-free / Embodiment-free Data","采集时不需要机器人在场，人直接操作或佩戴设备，统称 UMI、Ego、手套类路线（如觅蜂 MEgo）"],
+[5,"UMI","Universal Manipulation Interface","人手持与机器人夹爪同构的工具完成任务，记录末端轨迹和夹爪开合，2024 年由 Stanford 等提出"],
+[5,"第一视角数据","Egocentric Data (Ego)","人佩戴头戴相机在日常中正常做事，事后从视频重建手部和物体运动"],
+[5,"动捕","MoCap (Motion Capture)","用光学、惯性等方式记录人体关节运动，再映射到机器人"],
+[5,"人类示教","Human Demonstration","由人完成任务并被记录，作为模仿学习的训练样本，是以上路线的统称"],
+[5,"仿真数据 / 合成数据","Simulation / Synthetic Data","物理引擎生成（Genesis、Isaac Sim），量大成本低，但存在 sim-to-real gap"],
+[5,"众包采集","Crowdsourced Collection","把设备发给社会人员在真实场景中采集，按有效时长结算，如觅蜂派、Figure Index"],
+[5,"主从臂","Leader-Follower Arm","人操作主臂（leader），从臂（follower，即真机）同步跟随，如 ALOHA、GELLO"],
+[5,"同构","Kinematically Isomorphic","采集设备与机器人的关节结构或几何完全一致，数据可直接对应，如 GELLO、Sunday 手套"],
+[5,"手持夹爪","Handheld Gripper","UMI 类设备的本体，带相机和开合测量，如 FastUMI Pro、MEgo Gripper"],
+[5,"头戴式采集设备","Head-mounted Rig","Ego 路线的主设备，通常含多个鱼眼或双目相机，如 MEgo View、Meta Aria"],
+[5,"腕部相机","Wrist Camera","装在手腕或夹爪上的相机，捕捉操作细节"],
+[5,"数据手套","Data Glove","记录手指关节角度，可附加触觉或力传感，如 Manus、Sunday Skill Capture Glove"],
+[5,"动捕服","MoCap Suit","穿戴式全身惯性或光学标记采集装置，用于人形机器人全身动作"],
+[5,"VR 遥操作","VR Teleoperation","用 VR 头显和手柄控制机器人，如 Apple Vision Pro、Quest 方案"],
+[5,"力反馈","Haptic / Force Feedback","把机器人受到的力传回操作者手上，提升精细操作质量，如 HaptX"],
+[5,"数采站 / 采集单元","Collection Cell / Rig","一套完整的采集工位：机器人、相机阵列、标定物、计算设备"],
+
+[6,"轨迹","Trajectory","一次任务中位姿、关节、夹爪状态随时间的序列"],
+[6,"条 / Episode","Episode / Demonstration","一次完整任务的记录，数据量常按条或小时计"],
+[6,"有效时长","Valid Hours","通过质检、可用于训练的数据时长，是计价和结算单位"],
+[6,"多模态","Multimodal","视觉、深度、触觉、力、语言、动作等多种信号"],
+[6,"动作重定向","Retargeting","把人的动作映射到机器人的关节空间"],
+[6,"本体差异","Embodiment Gap","人与机器人、或不同机器人之间结构差异导致数据不能直接迁移"],
+[6,"手部重建","Hand Pose Estimation","从视频中估计手部关节，Ego 路线的核心算法"],
+[6,"数据治理","Data Curation / Governance","清洗、同步、重建、标注、质检、格式转换的全流程"],
+[6,"标注","Annotation","给数据加任务描述、阶段切分、成功失败等标签"],
+[6,"数据格式","Data Format","常见如 RLDS、LeRobot、HDF5"],
+[6,"数据金字塔","Data Pyramid","底层是海量互联网视频和 Ego 数据，中层是 UMI、手套等人类示教，顶层是少量真机数据"],
+[6,"数据飞轮","Data Flywheel","部署产生数据，数据改进模型，模型带来更多部署"],
+[6,"数据回流","Fleet Data","已部署机器人在真实业务中自然产生并回传的数据"],
+
+[7,"仿真到现实","Sim-to-Real","在仿真里训练，再把策略迁移到真机"],
+[7,"仿真-现实差距","Sim-to-Real Gap","仿真和真实世界之间的差异"],
+[7,"数字孪生","Digital Twin","虚拟复刻真实场景"],
+[7,"后训练 / 微调","Post-training / Fine-tuning","在基座模型上用少量定向数据，针对具体任务或场景调优"],
+[7,"端侧推理","On-device / Edge Inference","模型在机器人本地运行（Jetson Thor）"],
+[7,"OTA 升级","Over-the-Air Update","远程更新模型"],
+[7,"成功率","Success Rate","核心指标，商用门槛一般在 95% 到 99% 以上"],
+[7,"节拍","Cycle Time / Takt Time","完成一次任务的时间，工业场景很看重"],
+[7,"平均无故障时间","MTBF (Mean Time Between Failures)","工业场景的核心可靠性指标"],
+
+[8,"场景落地","Deployment / Real-world Use Case",""],
+[8,"试点部署","Pilot Deployment / POC","在客户现场小规模验证"],
+[8,"RaaS / 以租代售","Robot-as-a-Service","按月、按小时或按任务收费，而不是一次性卖整机"],
+[8,"投资回报周期","ROI / Payback Period","B 端客户买单的核心依据"],
+[8,"单位经济模型","Unit Economics","单台成本、单任务成本与可替代人工成本的对比"],
+[8,"BOM 成本","Bill of Materials","物料清单及成本，人形机器人降本的关键；关节模组、灵巧手、传感器、计算单元占大头"],
+[8,"量产","Mass Production","从样机到规模化生产，关键在一致性、良率、供应链，是中国厂商的优势环节"],
+[8,"自主率","Autonomy Rate","不需要人工干预完成的任务比例，数值越低，越依赖人工远程接管"],
+[8,"人工接管","Human-in-the-loop / Expert Mode","模型无法完成时由远程操作员接管，如 1X NEO 的 Expert Mode"],
+[8,"全栈","Full-stack","模型 + 硬件 + 数据一起做"],
+[8,"横向平台","Horizontal Platform","一个大脑服务多家硬件（Skild、PI）"],
+[8,"垂直一体化","Vertical Integration","自研硬件和模型（Figure、Tesla）"],
+[8,"卖铲人","Picks and Shovels","数据、部件、算力等基础设施供应商"],
+[8,"产业链上游 / 中游 / 下游","Upstream / Midstream / Downstream","上游是部件，中游是本体和大脑，下游是场景"],
+
+[9,"数采工厂 / 训练场","Data Factory / Training Ground","集中部署机器人和采集员、规模化采集数据的场地，国内 2026 年已超 70 家"],
+[9,"采集员 / 机器人训练师","Data Collector / Teleoperator","执行采集任务的人员"],
+[9,"产能","Collection Capacity","单位时间可产出的有效数据量，常用万小时、百万小时级"],
+[9,"数据授权","Data Licensing","数据的使用权、独占或非独占、可否转售"],
+[9,"自建采集","Insourcing","客户自建采集体系，是数据服务商的主要风险"]
+];
+const T=RAW.map((r,i)=>{
+  const n=RAW.slice(0,i).filter(x=>x[0]===r[0]).length+1;
+  return {i,cat:r[0],zh:r[1],en:r[2],note:r[3],code:String(r[0]+1).padStart(2,"0")+"."+String(n).padStart(2,"0")};
+});
+
+const S={mode:"browse",cat:-1,q:"",maskZh:false,maskEn:false,onlyNew:false,
+  fcFront:"zh",fcIdx:0,fcDeck:[],quizDir:"zh2en",quiz:null,score:{n:0,ok:0,streak:0}};
+let known=new Set();
+try{known=new Set(JSON.parse(localStorage.getItem("rgl-known-v2")||"[]"))}catch(e){}
+function saveKnown(){try{localStorage.setItem("rgl-known-v2",JSON.stringify([...known]))}catch(e){};renderProg()}
+
+const $=s=>document.querySelector(s);
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function hl(s){if(!S.q)return esc(s);const q=S.q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");return esc(s).replace(new RegExp("("+esc(q)+")","gi"),"<mark>$1</mark>")}
+function pool(){
+  const q=S.q.toLowerCase();
+  return T.filter(t=>(S.cat<0||t.cat===S.cat)&&(!q||(t.zh+t.en+t.note).toLowerCase().includes(q))&&(!S.onlyNew||!known.has(t.i)));
+}
+const TOUCH=window.matchMedia&&matchMedia("(hover:none)").matches;
+const CAN_SPEAK="speechSynthesis" in window;
+if(!CAN_SPEAK)document.documentElement.classList.add("nospeech");
+if(TOUCH)document.getElementById("q").placeholder="搜索中文、English 或说明";
+function speak(text){
+  try{const u=new SpeechSynthesisUtterance(text.replace(/\(.*?\)/g,"").replace(/\//g,", "));u.lang="en-US";u.rate=.92;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}
+}
+const ICON_SPK='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+const ICON_OK='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5 9-10"/></svg>';
+
+function renderChapters(){
+  const counts=CATS.map((_,c)=>T.filter(t=>t.cat===c).length);
+  $("#chapters").innerHTML=
+    `<button class="chap ${S.cat<0?"on":""}" data-cat="-1" type="button"><span class="no">ALL</span><span>全部术语</span><span class="ct">${T.length}</span></button>`+
+    CATS.map((c,i)=>`<button class="chap ${S.cat===i?"on":""}" data-cat="${i}" type="button"><span class="no">${String(i+1).padStart(2,"0")}</span><span>${c[0]}</span><span class="ct">${counts[i]}</span></button>`).join("");
+}
+function renderProg(){
+  $("#progTxt").textContent=known.size+" / "+T.length;
+  $("#progBar").style.width=(known.size/T.length*100)+"%";
+}
+
+function renderBrowse(){
+  const list=pool();
+  let h=`<div class="toolbar">
+    <span>自测遮挡：</span>
+    <button class="chip ${S.maskZh?"on":""}" data-tog="maskZh" type="button">遮住中文</button>
+    <button class="chip ${S.maskEn?"on":""}" data-tog="maskEn" type="button">遮住英文</button>
+    <span style="margin-left:8px">筛选：</span>
+    <button class="chip ${S.onlyNew?"on":""}" data-tog="onlyNew" type="button">只看未掌握</button>
+    <span style="margin-left:auto">${list.length} 条</span></div>`;
+  if(!list.length){$("#view").innerHTML=h+`<div class="list"><div class="empty">没有匹配的术语，换个关键词试试。</div></div>`;return}
+  const groups=[...new Set(list.map(t=>t.cat))];
+  for(const c of groups){
+    h+=`<div class="sechead"><span class="no">${String(c+1).padStart(2,"0")}</span><h2>${CATS[c][0]}</h2><span class="en">${CATS[c][1]}</span></div><div class="list">`;
+    for(const t of list.filter(x=>x.cat===c)){
+      h+=`<div class="row">
+        <span class="id">${t.code}</span>
+        <span class="zh"><span class="${S.maskZh?"mask":""}">${hl(t.zh)}</span></span>
+        <span class="en"><span class="${S.maskEn?"mask":""}">${hl(t.en)}</span></span>
+        <span class="note">${t.note?hl(t.note):"<span style='opacity:.5'>无补充说明</span>"}</span>
+        <span class="act">
+          <button class="ib" data-say="${t.i}" title="朗读英文" aria-label="朗读英文" type="button">${ICON_SPK}</button>
+          <button class="ib ${known.has(t.i)?"known":""}" data-know="${t.i}" title="标记为已掌握" aria-label="标记为已掌握" type="button">${ICON_OK}</button>
+        </span></div>`;
+    }
+    h+=`</div>`;
+  }
+  $("#view").innerHTML=h;
+}
+
+function buildDeck(shuffle){
+  S.fcDeck=pool().map(t=>t.i);
+  if(shuffle)for(let i=S.fcDeck.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[S.fcDeck[i],S.fcDeck[j]]=[S.fcDeck[j],S.fcDeck[i]]}
+  S.fcIdx=0;
+}
+function renderCards(){
+  if(!S.fcDeck.length)buildDeck(false);
+  const d=S.fcDeck;
+  let h=`<div class="fc-wrap"><div class="toolbar">
+    <span>正面显示：</span>
+    <button class="chip ${S.fcFront==="zh"?"on":""}" data-front="zh" type="button">中文</button>
+    <button class="chip ${S.fcFront==="en"?"on":""}" data-front="en" type="button">English</button>
+    <button class="chip ${S.onlyNew?"on":""}" data-tog="onlyNew" type="button">只练未掌握</button>
+    <button class="chip" data-shuffle="1" type="button">打乱顺序</button></div>`;
+  if(!d.length){$("#view").innerHTML=h+`<div class="list"><div class="empty">这一组都掌握了。取消“只练未掌握”或换个章节继续。</div></div></div>`;return}
+  const t=T[d[S.fcIdx]];
+  const zhFace=`<div class="big">${esc(t.zh)}</div>`;
+  const enFace=`<div class="big en">${esc(t.en)}</div>`;
+  h+=`<div class="fc-meta"><span>${CATS[t.cat][0]} · ${t.code}</span><span>${S.fcIdx+1} / ${d.length}${known.has(t.i)?" · <b style='color:var(--good)'>已掌握</b>":""}</span></div>
+    <div class="card" id="card" tabindex="0" role="button" aria-label="翻转卡片">
+      <div class="card-inner">
+        <div class="face"><span class="tag">${S.fcFront==="zh"?"中文 → English":"English → 中文"}</span>${S.fcFront==="zh"?zhFace:enFace}<span class="hint">${TOUCH?"轻点翻面，左右滑动切换":"点击或按空格翻面"}</span></div>
+        <div class="face back"><span class="tag">答案</span>${S.fcFront==="zh"?enFace:zhFace}<div class="sub">${S.fcFront==="zh"?esc(t.zh):esc(t.en)}</div><div class="desc">${esc(t.note||"")}</div></div>
+      </div>
+    </div>
+    <div class="fc-ctrl">
+      <button class="btn" data-fc="prev" type="button">上一张</button>
+      <button class="btn" data-say="${t.i}" type="button">${ICON_SPK} 朗读</button>
+      <button class="btn again" data-fc="again" type="button">还不熟</button>
+      <button class="btn ok" data-fc="ok" type="button">${ICON_OK} 记住了</button>
+      <button class="btn" data-fc="next" type="button">下一张</button>
+    </div>
+    <div class="keys"><span class="kbd">Space</span> 翻面　<span class="kbd">←</span> <span class="kbd">→</span> 切换　<span class="kbd">1</span> 还不熟　<span class="kbd">2</span> 记住了　<span class="kbd">S</span> 朗读</div></div>`;
+  $("#view").innerHTML=h;
+}
+function fcMove(n){if(!S.fcDeck.length)return;S.fcIdx=(S.fcIdx+n+S.fcDeck.length)%S.fcDeck.length;renderCards()}
+function fcMark(ok){
+  const id=S.fcDeck[S.fcIdx];if(id==null)return;
+  ok?known.add(id):known.delete(id);saveKnown();
+  if(ok&&S.onlyNew){S.fcDeck.splice(S.fcIdx,1);if(S.fcIdx>=S.fcDeck.length)S.fcIdx=0;renderCards()}else fcMove(1);
+}
+
+function newQ(){
+  const p=pool().length>=4?pool():T.filter(t=>S.cat<0||t.cat===S.cat);
+  const src=p.length>=4?p:T;
+  const ans=src[Math.random()*src.length|0];
+  let dis=T.filter(t=>t.i!==ans.i&&t.cat===ans.cat);
+  if(dis.length<3)dis=T.filter(t=>t.i!==ans.i);
+  dis=dis.sort(()=>Math.random()-.5).slice(0,3);
+  S.quiz={ans,opts:[ans,...dis].sort(()=>Math.random()-.5),picked:null};
+}
+function renderQuiz(){
+  if(!S.quiz)newQ();
+  const {ans,opts,picked}=S.quiz;const z=S.quizDir==="zh2en";
+  const acc=S.score.n?Math.round(S.score.ok/S.score.n*100)+"%":"–";
+  let h=`<div class="qz"><div class="toolbar">
+    <span>题型：</span>
+    <button class="chip ${z?"on":""}" data-dir="zh2en" type="button">看中文选英文</button>
+    <button class="chip ${!z?"on":""}" data-dir="en2zh" type="button">看英文选中文</button>
+    <span style="margin-left:auto">题目来自：${S.cat<0?"全部章节":CATS[S.cat][0]}</span></div>
+    <div class="qz-score">
+      <div class="stat"><b>${S.score.n}</b><span>已答</span></div>
+      <div class="stat"><b>${acc}</b><span>正确率</span></div>
+      <div class="stat"><b>${S.score.streak}</b><span>连对</span></div>
+    </div>
+    <div class="qbox">
+      <div class="q-tag">${CATS[ans.cat][0]} · ${ans.code}</div>
+      <div class="q ${z?"":"en"}">${esc(z?ans.zh:ans.en)}</div>
+      <div class="q-note">${picked!=null&&ans.note?esc(ans.note):""}</div>
+      <div class="opts">${opts.map((o,k)=>{
+        let cls="";if(picked!=null){if(o.i===ans.i)cls="right";else if(o.i===picked)cls="wrong"}
+        return `<button class="opt ${cls}" data-pick="${o.i}" ${picked!=null?"disabled":""} type="button"><span class="k">${k+1}</span><span>${esc(z?o.en:o.zh)}</span></button>`}).join("")}</div>
+      <div class="fb">${picked==null?"":picked===ans.i?`<span class="ok">答对了。</span> 按 Enter 进入下一题。`:`<span class="no">答错了。</span> 正确答案：${esc(z?ans.en:ans.zh)}，已加入待复习。按 Enter 继续。`}</div>
+      <div class="fc-ctrl" style="justify-content:flex-start">
+        <button class="btn" data-say="${ans.i}" type="button">${ICON_SPK} 朗读英文</button>
+        <button class="btn pri" data-nextq="1" type="button">${picked==null?"跳过":"下一题"}</button>
+      </div>
+    </div>
+    <div class="keys"><span class="kbd">1</span>–<span class="kbd">4</span> 选择　<span class="kbd">Enter</span> 下一题</div></div>`;
+  $("#view").innerHTML=h;
+}
+function pick(id){
+  const qz=S.quiz;if(!qz||qz.picked!=null)return;
+  qz.picked=id;S.score.n++;
+  if(id===qz.ans.i){S.score.ok++;S.score.streak++}else{S.score.streak=0;known.delete(qz.ans.i);saveKnown()}
+  renderQuiz();
+}
+
+function render(){
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.mode===S.mode));
+  renderChapters();renderProg();
+  ({browse:renderBrowse,cards:renderCards,quiz:renderQuiz})[S.mode]();
+}
+function setMode(m){S.mode=m;if(m==="cards")buildDeck(false);if(m==="quiz")S.quiz=null;render();try{history.replaceState(null,"","#"+m)}catch(e){}}
+
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button,.mask,#card");if(!b)return;
+  if(b.classList.contains("mask")){b.classList.toggle("rev");return}
+  if(b.id==="card"){b.classList.toggle("flip");return}
+  const d=b.dataset;
+  if(d.mode)setMode(d.mode);
+  else if(d.cat!=null){S.cat=+d.cat;S.fcDeck=[];S.quiz=null;render()}
+  else if(d.tog){S[d.tog]=!S[d.tog];if(S.mode==="cards")buildDeck(false);render()}
+  else if(d.say!=null)speak(T[+d.say].en);
+  else if(d.know!=null){const i=+d.know;known.has(i)?known.delete(i):known.add(i);saveKnown();render()}
+  else if(d.front){S.fcFront=d.front;renderCards()}
+  else if(d.shuffle){buildDeck(true);renderCards()}
+  else if(d.fc){({prev:()=>fcMove(-1),next:()=>fcMove(1),ok:()=>fcMark(true),again:()=>fcMark(false)})[d.fc]()}
+  else if(d.dir){S.quizDir=d.dir;S.quiz=null;renderQuiz()}
+  else if(d.pick!=null)pick(+d.pick);
+  else if(d.nextq){S.quiz=null;renderQuiz()}
+});
+let tx=null,ty=null;
+document.addEventListener("touchstart",e=>{if(e.target.closest("#card")){tx=e.touches[0].clientX;ty=e.touches[0].clientY}else tx=null},{passive:true});
+document.addEventListener("touchend",e=>{
+  if(tx==null)return;const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;tx=null;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){e.preventDefault();fcMove(dx<0?1:-1)}
+});
+$("#resetBtn").addEventListener("click",()=>{known.clear();saveKnown();render()});
+$("#q").addEventListener("input",e=>{S.q=e.target.value.trim();S.fcDeck=[];S.quiz=null;render()});
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT"){if(e.key==="Escape"){e.target.value="";S.q="";render();e.target.blur()}return}
+  if(e.key==="/"){e.preventDefault();$("#q").focus();return}
+  if(S.mode==="cards"){
+    if(e.key===" "){e.preventDefault();$("#card")?.classList.toggle("flip")}
+    else if(e.key==="ArrowRight")fcMove(1);else if(e.key==="ArrowLeft")fcMove(-1);
+    else if(e.key==="1")fcMark(false);else if(e.key==="2")fcMark(true);
+    else if(e.key.toLowerCase()==="s"){const id=S.fcDeck[S.fcIdx];if(id!=null)speak(T[id].en)}
+  }else if(S.mode==="quiz"){
+    if(/^[1-4]$/.test(e.key)&&S.quiz){const o=S.quiz.opts[+e.key-1];if(o)pick(o.i)}
+    else if(e.key==="Enter"){S.quiz=null;renderQuiz()}
+  }
+});
+const h0=(location.hash||"").slice(1);
+if(["browse","cards","quiz"].includes(h0))S.mode=h0;
+if(S.mode==="cards")buildDeck(false);
+render();
+</script>
+</body>
+</html>

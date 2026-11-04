@@ -1,0 +1,25 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/glossary/glossary",
+    "pages/lesson/lesson"
+  ],
+  "window": {
+    "navigationBarTitleText": "学习工具",
+    "navigationBarBackgroundColor": "@navBg",
+    "navigationBarTextStyle": "@navTxt",
+    "backgroundColor": "@bg",
+    "backgroundTextStyle": "@bgTxt"
+  },
+  "darkmode": true,
+  "themeLocation": "theme.json",
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "plugins": {
+    "WechatSI": {
+      "version": "0.3.5",
+      "provider": "wx069ba97219f66d99"
+    }
+  }
+}
