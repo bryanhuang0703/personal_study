@@ -17,7 +17,7 @@ tools/html2deck.js                 HTML → 模块数据 转换脚本（不打�
 
 ## 本地运行
 
-微信开发者工具 → 导入项目 → 选本仓库根目录。`project.config.json` 里 appid 是 `touristappid`（测试号），上传前换成自己的。
+微信开发者工具 → 导入项目 → 选本仓库根目录。`project.config.json` 里 appid 已设为 `wxab5ae284768f88ca`（测试小程序）。
 
 ## 加一个新模块
 
@@ -38,7 +38,7 @@ node tools/html2deck.js source/xxx.html xxx 术语
 
 英文朗读走「微信同声传译」插件（`utils/tts.js`），已在 `app.json` 的 `plugins` 声明。启用前必须：
 
-1. `project.config.json` 的 appid 换成自己的小程序 appid（测试号 `touristappid` 无法使用插件，会编译报错）。
+1. appid 必须是真实小程序 appid（`touristappid` 无法使用插件），当前已配置 `wxab5ae284768f88ca`。
 2. 小程序后台 → 设置 → 第三方设置 → 插件管理 → 添加插件，搜「微信同声传译」（AppID `wx069ba97219f66d99`）。
 3. 版本号以后台显示的最新版为准，必要时改 `app.json` 里的 `version`。
 
