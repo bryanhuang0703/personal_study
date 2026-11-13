@@ -1,10 +1,12 @@
 // 由 source/cs50-ai/ai.js 转换，可直接手改。
+// week 6.5：课程中 AI 一讲位于 Week 6 Python 与 Week 7 SQL 之间，用于首页排序。
 // 卡片字段：id、en、zh、def 定义、ex 例子、code 代码、sup 补充、rel 关联、q/a 自测。进度按 id 存，不要改 id。
 module.exports = {
   "id": "cs50-ai",
   "type": "notes",
   "tag": "CS50",
   "course": "CS50x 2026",
+  "week": 6.5,
   "title": "CS50 · AI",
   "subtitle": "CS50x 2026 · Artificial Intelligence",
   "desc": "按 CS50x AI 讲义的顺序整理：框架速览 + 定义、例子、自测题。",
