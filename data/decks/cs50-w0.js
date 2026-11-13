@@ -1,0 +1,220 @@
+// 由 tools/cs50-json2deck.js 从 source/cs50-week0.json 生成，可直接手改。
+module.exports = {
+  "id": "cs50-w0",
+  "type": "lesson",
+  "tag": "CS50",
+  "title": "CS50 · Week 0 Scratch",
+  "subtitle": "CS50x 2026",
+  "desc": "Week 0 给出整门课的骨架：计算机科学就是 input → algorithm → output。所有数据都用二进制表示，所有程序都由少数几种基本结构组成。",
+  "schema": "cs50-cards/v1",
+  "course": "CS50x 2026",
+  "week": 0,
+  "weekTitle": "Scratch",
+  "source": "https://cs50.harvard.edu/x/weeks/0/",
+  "license": "Based on CS50 by Harvard University, CC BY-NC-SA 4.0",
+  "map": {
+    "title": "这一周在全局里的位置",
+    "summary": "Week 0 给出整门课的骨架：计算机科学就是 input → algorithm → output。所有数据都用二进制表示，所有程序都由少数几种基本结构组成。",
+    "chain": [
+      {
+        "week": 0,
+        "label": "Scratch",
+        "note": "表示信息 + 算法 + 基本结构",
+        "current": true
+      },
+      {
+        "week": 1,
+        "label": "C",
+        "note": "同样的结构换成文本语法"
+      },
+      {
+        "week": 3,
+        "label": "Algorithms",
+        "note": "正式分析算法的快慢"
+      },
+      {
+        "week": 4,
+        "label": "Memory",
+        "note": "二进制在内存和文件里的样子"
+      },
+      {
+        "week": 6,
+        "label": "Python",
+        "note": "更高层的抽象，同样的结构"
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "w0-01",
+      "title": "计算机科学 = 解决问题",
+      "question": "整门课最核心的模型是什么？",
+      "conclusion": "任何问题都可以抽象成 input → algorithm → output。要解决它，先决定怎么表示输入和输出，再设计中间的步骤。",
+      "points": [
+        "Input 和 output 需要一种统一的表示方式，计算机选择了二进制",
+        "Algorithm 是一组精确、有限的步骤",
+        "好的算法不仅要正确，还要高效，设计要清晰"
+      ],
+      "analogy": "像菜谱：食材是 input，步骤是 algorithm，菜是 output。",
+      "links": [
+        {
+          "week": 3,
+          "text": "Week 3 用 Big O 正式衡量 algorithm 的效率"
+        },
+        {
+          "week": 7,
+          "text": "SQL 也是这个模型：查询是 input，数据库引擎执行，结果集是 output"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "解决一个问题之前，首先要决定什么？",
+          "a": "如何表示 input 和 output。"
+        },
+        {
+          "q": "评价一个算法通常看哪几个方面？",
+          "a": "正确性、效率、设计（可读性和可维护性）。"
+        }
+      ],
+      "minutes": 2
+    },
+    {
+      "id": "w0-02",
+      "title": "二进制：一切信息的底层",
+      "question": "计算机为什么只用 0 和 1？",
+      "conclusion": "晶体管只有开和关两种稳定状态，对应 0 和 1，也就是 bit。8 个 bit 是一个 byte，所有数字、文字、颜色都编码成 bit 序列。",
+      "points": [
+        "n 个 bit 能表示 2ⁿ 种值，8 bit 可表示 0 到 255",
+        "二进制每一位是 2 的幂：1、2、4、8……",
+        "base-10 和 base-2 只是同一个数的不同写法"
+      ],
+      "code": "01001000 = 64 + 8 = 72",
+      "analogy": "一排电灯开关，每种开关组合代表一个数。",
+      "links": [
+        {
+          "week": 1,
+          "text": "bit 数有限，所以 C 里会出现 integer overflow"
+        },
+        {
+          "week": 4,
+          "text": "Week 4 用 hexadecimal 简写二进制，一个 hex 位等于 4 bit"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "3 个 bit 最多能表示多少个不同的值？",
+          "a": "2³ = 8 个，0 到 7。"
+        },
+        {
+          "q": "二进制 101 等于十进制多少？",
+          "a": "4 + 0 + 1 = 5。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w0-03",
+      "title": "用数字表示文字、颜色、媒体",
+      "question": "只有数字，怎么表示字母和图片？",
+      "conclusion": "靠约定。ASCII 和 Unicode 规定数字到字符的映射；RGB 用三个数字表示颜色；图片是像素网格，视频是图片序列。同一串 bit 的含义取决于上下文。",
+      "points": [
+        "ASCII 中 72 是 H，73 是 I，所以 \"HI\" 就是 72 73",
+        "Unicode 支持全球文字和 emoji，一个字符可能占多个 byte",
+        "一个像素常用 3 个 byte 表示 R、G、B",
+        "音乐可以表示为音高、时长等数字序列"
+      ],
+      "analogy": "同一个数字 72，放在文本里是 H，放在颜色里是一种红色的亮度。",
+      "links": [
+        {
+          "week": 2,
+          "text": "Week 2 作业里的 Caesar 加密，就是对字符的数字做加减"
+        },
+        {
+          "week": 4,
+          "text": "Week 4 直接读写 BMP 图片的像素字节"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "同一串 bit 如何决定它表示数字还是字母？",
+          "a": "由程序如何解释它决定，也就是上下文和类型。"
+        },
+        {
+          "q": "为什么需要 Unicode，而不是只用 ASCII？",
+          "a": "ASCII 只有 128 个字符，无法覆盖中文等全球文字和 emoji。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w0-04",
+      "title": "算法效率：查电话簿",
+      "question": "同一个问题，算法之间差距有多大？",
+      "conclusion": "一页页翻是线性的，n 页要 n 步；每次从中间劈开扔掉一半，是对数级的，1000 页只要约 10 步。问题规模翻倍，后者只多 1 步。",
+      "points": [
+        "逐页查找：步数随 n 线性增长",
+        "两页两页翻：快一倍，但仍是线性，还可能漏掉",
+        "二分查找：步数约为 log₂n，前提是数据有序",
+        "比较算法时看的是增长曲线的形状，不是具体秒数"
+      ],
+      "analogy": "猜 1 到 100 的数字，每次问“比 50 大吗”，7 次以内必定猜中。",
+      "links": [
+        {
+          "week": 3,
+          "text": "Week 3 用 O(n)、O(log n) 正式描述这三条曲线"
+        },
+        {
+          "week": 3,
+          "text": "二分查找需要有序数据，所以引出了排序算法"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "电话簿从 1000 页变成 2000 页，二分查找多几步？",
+          "a": "只多 1 步。"
+        },
+        {
+          "q": "二分查找的前提条件是什么？",
+          "a": "数据必须已经排序。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w0-05",
+      "title": "程序的基本积木",
+      "question": "所有程序都由什么组成？",
+      "conclusion": "Functions、conditionals、Boolean expressions、loops、variables。Scratch 用积木拼出它们，之后每种语言只是换了语法。",
+      "points": [
+        "Function：做一件事的命名动作，可以有 input（参数）和 output（返回值）",
+        "Conditional + Boolean expression：根据真假选分支",
+        "Loop：重复执行",
+        "Variable：存储会变化的值",
+        "Abstraction：把细节封装成一个有名字的块，只关心它做什么"
+      ],
+      "code": "when green flag clicked\nask \"What's your name?\"\nsay (join \"hello, \" answer)",
+      "analogy": "乐高的几种基础积木，能拼出任何形状。",
+      "links": [
+        {
+          "week": 1,
+          "text": "Week 1 把同样的积木写成 C 语法"
+        },
+        {
+          "week": 6,
+          "text": "Python 也是这几种结构，语法更接近伪代码"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Abstraction 的作用是什么？",
+          "a": "隐藏实现细节，让人只关注一个模块做什么，从而降低复杂度。"
+        },
+        {
+          "q": "Function 的 input 和 output 在编程里通常叫什么？",
+          "a": "参数（arguments）和返回值（return value）。"
+        }
+      ],
+      "minutes": 3
+    }
+  ]
+};

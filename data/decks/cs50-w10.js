@@ -1,0 +1,257 @@
+// 由 tools/cs50-json2deck.js 从 source/cs50-week10.json 生成，可直接手改。
+module.exports = {
+  "id": "cs50-w10",
+  "type": "lesson",
+  "tag": "CS50",
+  "title": "CS50 · Week 10 The End",
+  "subtitle": "CS50x 2026",
+  "desc": "Week 10 不讲新内容，是整门课的复盘。这一组卡片把 Week 0 到 9 按几条主线重新串起来，适合每学完几周回来看一遍。",
+  "schema": "cs50-cards/v1",
+  "course": "CS50x 2026",
+  "week": 10,
+  "weekTitle": "The End",
+  "source": "https://cs50.harvard.edu/x/weeks/10/",
+  "license": "Based on CS50 by Harvard University, CC BY-NC-SA 4.0",
+  "map": {
+    "title": "全课一张图",
+    "summary": "Week 10 不讲新内容，是整门课的复盘。这一组卡片把 Week 0 到 9 按几条主线重新串起来，适合每学完几周回来看一遍。",
+    "chain": [
+      {
+        "week": 0,
+        "label": "Scratch",
+        "note": "信息表示与算法思维"
+      },
+      {
+        "week": 1,
+        "label": "C → Memory",
+        "note": "Week 1 到 4：贴近机器的编程"
+      },
+      {
+        "week": 5,
+        "label": "Data Structures",
+        "note": "组织数据的方式"
+      },
+      {
+        "week": 6,
+        "label": "Python → SQL",
+        "note": "Week 6 到 7：更高层的抽象"
+      },
+      {
+        "week": 8,
+        "label": "Web",
+        "note": "Week 8 到 9：网络与完整应用"
+      },
+      {
+        "week": 10,
+        "label": "The End",
+        "note": "主线复盘",
+        "current": true
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "w10-01",
+      "title": "主线一：abstraction 一层层往上",
+      "question": "这门课的结构是什么？",
+      "conclusion": "从 bit 开始，每一周都在前一层之上加一层 abstraction：bit → C → 内存与指针 → 数据结构 → Python → SQL → Web。上层让你更快完成任务，下层让你知道代价在哪。",
+      "points": [
+        "Week 0 到 4：贴近硬件，自己管理一切",
+        "Week 5：用指针组织数据",
+        "Week 6 到 7：语言和数据库替你管理内存与查找",
+        "Week 8 到 9：多台机器之间协作"
+      ],
+      "analogy": "像城市：地下是管道电缆，地面是道路建筑，你开车不必懂管网，但修路时必须懂。",
+      "links": [
+        {
+          "week": 4,
+          "text": "Week 4 是第一次揭开 abstraction 看底层"
+        },
+        {
+          "week": 6,
+          "text": "Week 6 是第一次主动往上走一层"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "高层 abstraction 的代价通常是什么？",
+          "a": "性能开销和对底层的控制力下降。"
+        },
+        {
+          "q": "为什么先学 C 再学 Python？",
+          "a": "先理解底层发生了什么，才知道高层工具替你隐藏了什么。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w10-02",
+      "title": "主线二：时间、空间、实现难度的取舍",
+      "question": "整门课反复出现的权衡是什么？",
+      "conclusion": "几乎每个设计决定都在三者之间取舍：运行时间、内存空间、开发难度。Merge sort 用空间换时间，hash table 用内存换速度，Python 用运行速度换开发速度，索引用写入速度换查询速度。",
+      "points": [
+        "Week 3：merge sort 需要额外内存",
+        "Week 5：trie 最快但最耗内存",
+        "Week 6：Python 开发快、运行慢",
+        "Week 7：index 让读变快、写变慢"
+      ],
+      "analogy": "又快、又省、又简单，通常只能选两样。",
+      "links": [
+        {
+          "week": 3,
+          "text": "Big O 是衡量这些取舍的共同语言"
+        },
+        {
+          "week": 7,
+          "text": "数据库索引是这个权衡在工程里的典型例子"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "举一个用空间换时间的例子。",
+          "a": "Hash table、trie、数据库 index、merge sort 都是。"
+        },
+        {
+          "q": "为什么不总是选最快的算法？",
+          "a": "可能更耗内存、更难实现或更难维护，n 小时收益也不明显。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w10-03",
+      "title": "主线三：同一个问题，不同的语言",
+      "question": "“查电话簿”在各周是怎么写的？",
+      "conclusion": "同一个问题贯穿全课：Week 0 撕电话簿，Week 3 在数组上 binary search，Week 5 用 hash table，Week 6 用 dict，Week 7 用 SELECT 加 index，Week 9 做成网页搜索。问题不变，工具越来越高级。",
+      "points": [
+        "C：自己写循环和比较",
+        "Python：if name in people",
+        "SQL：SELECT number FROM people WHERE name = ?",
+        "Web：表单提交 → Flask → SQL → 渲染结果"
+      ],
+      "analogy": "同一段路，先步行，再骑车，再开车，最后叫车。",
+      "links": [
+        {
+          "week": 0,
+          "text": "Week 0 的电话簿是整门课的起点"
+        },
+        {
+          "week": 9,
+          "text": "Week 9 的 shows 搜索把同类查找做成了 Web 应用"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Python 的 name in people（people 是 dict）底层用的是哪种结构？",
+          "a": "Hash table，平均 O(1)。"
+        },
+        {
+          "q": "SQL 版本的查找快慢主要取决于什么？",
+          "a": "查询的列上有没有 index。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w10-04",
+      "title": "主线四：一次请求的完整链路",
+      "question": "在网页上点“搜索”，背后经过了哪些周的知识？",
+      "conclusion": "浏览器提交表单（W8）→ DNS 解析与 TCP/IP 传输（W8）→ HTTP request 到达 Flask route（W9）→ Python 处理参数（W6）→ SQL 带 index 查询（W7）→ 引擎内部用树和内存（W4、W5）→ 渲染模板返回 HTML（W9）→ 浏览器构建 DOM 显示（W8）。",
+      "points": [
+        "每一步都是 input → algorithm → output",
+        "任何一环慢了，整体都会慢",
+        "任何一环不校验输入，都可能出安全问题"
+      ],
+      "analogy": "一次外卖：下单、派单、做菜、取餐、配送、送达，每一环都要靠谱。",
+      "links": [
+        {
+          "week": 8,
+          "text": "网络和前端两端"
+        },
+        {
+          "week": 9,
+          "text": "服务器端的串联者"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "哪一步把域名变成 IP？",
+          "a": "DNS 解析。"
+        },
+        {
+          "q": "整个链路中哪些环节必须校验用户输入？",
+          "a": "服务器端接收参数时，以及写入 SQL 前（用 placeholder）。"
+        }
+      ],
+      "minutes": 4
+    },
+    {
+      "id": "w10-05",
+      "title": "主线五：不信任输入",
+      "question": "全课出现过哪些因为输入导致的问题？",
+      "conclusion": "Buffer overflow（W4）、SQL injection（W7）、绕过前端校验（W8、W9）本质相同：程序默认输入是安全的。正确做法是检查边界、参数化查询、服务器端校验。",
+      "points": [
+        "C 不检查数组边界，要自己检查",
+        "SQL 不区分数据和代码，要用 placeholder",
+        "浏览器端的代码用户可以修改，不能当作防线",
+        "密码要 hash 后存储"
+      ],
+      "analogy": "门卫不能只看对方说自己是谁，要核对证件。",
+      "links": [
+        {
+          "week": 4,
+          "text": "Buffer overflow"
+        },
+        {
+          "week": 7,
+          "text": "SQL injection"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Buffer overflow 和 SQL injection 的共同根源是什么？",
+          "a": "都没有约束不可信的输入。"
+        },
+        {
+          "q": "为什么不能只在 JavaScript 里校验表单？",
+          "a": "用户可以禁用或修改前端代码，直接发送请求。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w10-06",
+      "title": "复习方法：反复画这张图",
+      "question": "怎样用这些卡片形成长期记忆？",
+      "conclusion": "Framework 级理解的标志是：能从任意一个概念出发，说出它的上一层和下一层。每次复习时，先不看卡片，试着画出这一周在全局中的位置，再翻卡片核对。",
+      "points": [
+        "间隔重复：1 天、3 天、1 周、2 周后各回看一次",
+        "先自测，后看答案",
+        "每张卡的“串联”是复习的重点",
+        "遇到想深入的概念，回到 CS50 原课的 notes 和 problem set"
+      ],
+      "analogy": "认路靠的是记住地标之间的关系，不是背下每条街名。",
+      "links": [
+        {
+          "week": 0,
+          "text": "从头再看一遍时，会发现很多后面的伏笔"
+        },
+        {
+          "week": 5,
+          "text": "数据结构是承上启下最关键的一周"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "怎样判断自己对一个概念达到了 framework 级理解？",
+          "a": "能说出它解决什么问题、依赖什么底层、被什么上层使用。"
+        },
+        {
+          "q": "主动回忆比重读更有效的原因是什么？",
+          "a": "提取记忆本身会强化记忆，重读容易产生“我懂了”的错觉。"
+        }
+      ],
+      "minutes": 3
+    }
+  ]
+};

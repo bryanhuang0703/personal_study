@@ -1,0 +1,216 @@
+{
+  "schema": "cs50-cards/v1",
+  "course": "CS50x 2026",
+  "week": 1,
+  "weekTitle": "C",
+  "source": "https://cs50.harvard.edu/x/weeks/1/",
+  "license": "Based on CS50 by Harvard University, CC BY-NC-SA 4.0",
+  "map": {
+    "title": "这一周在全局里的位置",
+    "summary": "Week 1 把 Scratch 的积木换成 C 的文本语法，同时暴露第一个现实约束：计算机的内存有限，数字的精度也有限。",
+    "chain": [
+      {
+        "week": 0,
+        "label": "Scratch",
+        "note": "基本结构的直观版本"
+      },
+      {
+        "week": 1,
+        "label": "C",
+        "note": "语法、类型、编译、有限精度",
+        "current": true
+      },
+      {
+        "week": 2,
+        "label": "Arrays",
+        "note": "编译过程拆开看，数据成组存放"
+      },
+      {
+        "week": 4,
+        "label": "Memory",
+        "note": "类型和 string 的真相"
+      },
+      {
+        "week": 6,
+        "label": "Python",
+        "note": "不用编译，不用声明类型"
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "w1-01",
+      "title": "Source code → Machine code",
+      "question": "写好的 C 代码怎么变成能运行的程序？",
+      "conclusion": "人写 source code，compiler 把它翻译成 CPU 能执行的 machine code（0 和 1）。在 CS50 里 make hello 调用 clang 完成翻译，./hello 运行结果。",
+      "points": [
+        "C 是编译型语言，运行前必须先编译",
+        "改了代码必须重新编译，否则运行的还是旧版本",
+        "评价代码有三个维度：correctness、design、style"
+      ],
+      "code": "#include <stdio.h>\n\nint main(void)\n{\n    printf(\"hello, world\\n\");\n}",
+      "analogy": "Compiler 是翻译，把你的中文稿译成机器才懂的语言。",
+      "links": [
+        {
+          "week": 2,
+          "text": "Week 2 把编译拆成 preprocess、compile、assemble、link 四步"
+        },
+        {
+          "week": 6,
+          "text": "Python 用 interpreter 逐行执行，不需要单独编译"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "修改 hello.c 后直接运行 ./hello，会看到修改吗？",
+          "a": "不会，要先重新 make 编译。"
+        },
+        {
+          "q": "代码质量的三个维度是什么？",
+          "a": "Correctness、design、style。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w1-02",
+      "title": "类型与格式化输出",
+      "question": "C 为什么要声明变量类型？",
+      "conclusion": "类型告诉 compiler 一个值占多少内存、该怎么解释。printf 用 format code 指定怎么显示：%i 整数、%f 浮点、%s 字符串、%c 字符。",
+      "points": [
+        "常用类型：int、long、float、double、char、bool、string（CS50 库提供）",
+        "get_int、get_string 等是 CS50 库函数，带输入校验",
+        "#include 引入 header file，才能使用库里的函数",
+        "= 是赋值，== 是比较"
+      ],
+      "code": "string name = get_string(\"Name? \");\nint age = get_int(\"Age? \");\nprintf(\"%s is %i\\n\", name, age);",
+      "analogy": "类型是容器的规格标签：标了“4 字节整数”，就不能往里塞小数。",
+      "links": [
+        {
+          "week": 4,
+          "text": "Week 4 揭示 string 其实是 char *"
+        },
+        {
+          "week": 6,
+          "text": "Python 是动态类型，变量不需要声明类型"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "打印 float 应该用哪个 format code？",
+          "a": "%f。"
+        },
+        {
+          "q": "不 #include <cs50.h> 能用 get_int 吗？",
+          "a": "不能，compiler 不知道这个函数的声明。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w1-03",
+      "title": "条件与循环的 C 写法",
+      "question": "Scratch 的积木在 C 里长什么样？",
+      "conclusion": "if / else if / else 对应条件分支；while、for、do-while 对应循环。结构和 Scratch 一样，只是用花括号和分号表达。",
+      "points": [
+        "for 循环三段：初始化；条件；更新",
+        "do-while 至少执行一次，适合“先要输入，再校验”",
+        "while (true) 加 break 可以实现无限循环再跳出",
+        "逻辑运算：&& 与、|| 或、! 非"
+      ],
+      "code": "int n;\ndo\n{\n    n = get_int(\"Size: \");\n}\nwhile (n < 1);\n\nfor (int i = 0; i < n; i++)\n{\n    printf(\"#\");\n}",
+      "analogy": "do-while 像先尝一口再决定要不要加盐。",
+      "links": [
+        {
+          "week": 0,
+          "text": "对应 Scratch 的 if、repeat、forever 积木"
+        },
+        {
+          "week": 3,
+          "text": "嵌套循环是 O(n²) 的典型来源，比如 bubble sort"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "什么时候用 do-while 而不是 while？",
+          "a": "循环体至少要执行一次时，如先获取用户输入再校验。"
+        },
+        {
+          "q": "for (int i = 0; i < 3; i++) 执行几次？",
+          "a": "3 次，i 为 0、1、2。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w1-04",
+      "title": "Function 与 abstraction",
+      "question": "为什么要自己写函数？",
+      "conclusion": "把一段逻辑封装成有名字的 function，可以复用、隔离细节，让 main 读起来像提纲。C 要求函数先声明后使用，所以常在文件顶部写 prototype。",
+      "points": [
+        "返回类型 函数名(参数类型 参数名)",
+        "void 表示没有返回值或没有参数",
+        "Scope：变量只在声明它的花括号内有效",
+        "Prototype 让 main 可以写在文件前面"
+      ],
+      "code": "void meow(int n);\n\nint main(void)\n{\n    meow(3);\n}\n\nvoid meow(int n)\n{\n    for (int i = 0; i < n; i++)\n        printf(\"meow\\n\");\n}",
+      "analogy": "函数像一个按钮，按下就做好一件事，不用每次重新解释怎么做。",
+      "links": [
+        {
+          "week": 3,
+          "text": "函数可以调用自己，这就是 recursion"
+        },
+        {
+          "week": 4,
+          "text": "每次函数调用在 stack 上占一个 frame，参数是传值的副本"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "为什么要在 main 前写 prototype？",
+          "a": "C 从上到下编译，调用前必须知道函数的签名。"
+        },
+        {
+          "q": "在 for 循环里声明的 i，循环外能用吗？",
+          "a": "不能，它的 scope 只在循环内。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w1-05",
+      "title": "有限精度：overflow 与浮点误差",
+      "question": "计算机算数为什么会出错？",
+      "conclusion": "每种类型的 bit 数固定，能表示的范围和精度有限。整数超过上限会 overflow 绕回；浮点数无法精确表示大多数小数，1/3 打印多位就能看到误差。",
+      "points": [
+        "32 位 int 最大约 21 亿，超出会变成负数",
+        "int 相除会截断小数：1 / 3 得 0，要先转成 float",
+        "float 只能近似表示 0.1 这类数",
+        "现实案例：Y2K 问题，以及 32 位 Unix 时间在 2038 年溢出"
+      ],
+      "code": "float x = 1.0 / 3;\nprintf(\"%.20f\\n\", x);\n// 0.33333334326744079590",
+      "analogy": "汽车里程表只有 6 位，跑到 999999 之后会归零。",
+      "links": [
+        {
+          "week": 0,
+          "text": "n 个 bit 只能表示 2ⁿ 个值，这是 overflow 的根源"
+        },
+        {
+          "week": 6,
+          "text": "Python 同样存在浮点数精度误差"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "int x = 7 / 2; x 是多少？",
+          "a": "3，整数除法会截断小数部分。"
+        },
+        {
+          "q": "为什么金额计算不宜直接用 float？",
+          "a": "浮点数有表示误差，累计后会出现分厘偏差，通常用整数存“分”。"
+        }
+      ],
+      "minutes": 3
+    }
+  ]
+}

@@ -1,0 +1,253 @@
+// 由 tools/cs50-json2deck.js 从 source/cs50-week6.json 生成，可直接手改。
+module.exports = {
+  "id": "cs50-w6",
+  "type": "lesson",
+  "tag": "CS50",
+  "title": "CS50 · Week 6 Python",
+  "subtitle": "CS50x 2026",
+  "desc": "Week 6 换到更高层的语言。前五周手写的内存管理和数据结构，Python 都替你做好了。代价是运行更慢，收获是开发快得多。",
+  "schema": "cs50-cards/v1",
+  "course": "CS50x 2026",
+  "week": 6,
+  "weekTitle": "Python",
+  "source": "https://cs50.harvard.edu/x/weeks/6/",
+  "license": "Based on CS50 by Harvard University, CC BY-NC-SA 4.0",
+  "map": {
+    "title": "这一周在全局里的位置",
+    "summary": "Week 6 换到更高层的语言。前五周手写的内存管理和数据结构，Python 都替你做好了。代价是运行更慢，收获是开发快得多。",
+    "chain": [
+      {
+        "week": 1,
+        "label": "C",
+        "note": "同样的结构，更底层的语法"
+      },
+      {
+        "week": 5,
+        "label": "Data Structures",
+        "note": "Python 内置类型的实现原理"
+      },
+      {
+        "week": 6,
+        "label": "Python",
+        "note": "解释执行、动态类型、丰富的库",
+        "current": true
+      },
+      {
+        "week": 7,
+        "label": "SQL",
+        "note": "从 Python 里调用数据库"
+      },
+      {
+        "week": 9,
+        "label": "Flask",
+        "note": "用 Python 写 Web 后端"
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "w6-01",
+      "title": "从 C 到 Python：同样的积木",
+      "question": "Python 和 C 的写法差在哪？",
+      "conclusion": "结构完全一样：变量、条件、循环、函数。Python 去掉了类型声明、分号和花括号，用缩进表示代码块，不需要编译就能运行。",
+      "points": [
+        "python hello.py 直接运行，由 interpreter 逐行执行",
+        "缩进是语法的一部分，不是风格问题",
+        "for 循环直接遍历元素：for x in list",
+        "没有 main 也能运行，但大程序通常仍会定义 main"
+      ],
+      "code": "name = input(\"Name: \")\nfor i in range(3):\n    print(f\"hello, {name}\")",
+      "analogy": "同一首曲子从钢琴换成了吉他，旋律不变，指法不同。",
+      "links": [
+        {
+          "week": 0,
+          "text": "又一次证明程序就是那几种基本积木"
+        },
+        {
+          "week": 1,
+          "text": "对照 Week 1 的 C 代码，行数通常少一半以上"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Python 用什么表示代码块？",
+          "a": "缩进。"
+        },
+        {
+          "q": "运行 Python 程序前需要编译吗？",
+          "a": "不需要，interpreter 直接执行源代码。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w6-02",
+      "title": "动态类型与一切皆对象",
+      "question": "Python 不声明类型，怎么知道变量是什么？",
+      "conclusion": "类型跟着值走，不跟着变量名走。同一个变量可以先存数字再存字符串。所有值都是对象，自带 method，比如 s.upper()。",
+      "points": [
+        "int 可以无限大，不会 overflow",
+        "/ 总是返回 float，// 才是整除",
+        "float 依然有精度误差",
+        "str 是不可变的，修改会生成新字符串"
+      ],
+      "code": "x = 7 / 2    # 3.5\ny = 7 // 2   # 3\ns = \"hi\".upper()  # \"HI\"",
+      "analogy": "C 的变量是贴了规格标签的盒子，Python 的变量是贴在任意物品上的便签。",
+      "links": [
+        {
+          "week": 1,
+          "text": "Week 1 的整数截断和 overflow 问题，Python 解决了一部分"
+        },
+        {
+          "week": 4,
+          "text": "指针和地址是 Week 4 的内容，Python 不让你直接操作它们"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Python 里 7 / 2 和 7 // 2 分别是多少？",
+          "a": "3.5 和 3。"
+        },
+        {
+          "q": "Python 的 int 会 overflow 吗？",
+          "a": "不会，int 支持任意精度。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w6-03",
+      "title": "内置数据结构：list、dict、set",
+      "question": "Week 5 手写的结构，Python 里对应什么？",
+      "conclusion": "list 是动态数组，dict 是 hash table（key → value），set 是只有 key 的 hash table，tuple 是不可变的序列。选对类型，性能自然就对了。",
+      "points": [
+        "x in list 是 O(n)，x in set 和 x in dict 平均 O(1)",
+        "dict 适合按名字查值，如电话簿",
+        "set 适合去重和快速判断是否存在",
+        "list 支持 append，自动扩容"
+      ],
+      "code": "people = {\"David\": \"+1-617\", \"John\": \"+1-949\"}\nif \"David\" in people:\n    print(people[\"David\"])",
+      "analogy": "Week 5 自己造轮子，Week 6 直接买现成的车。",
+      "links": [
+        {
+          "week": 5,
+          "text": "dict 和 set 就是 hash table，list 就是动态 array"
+        },
+        {
+          "week": 7,
+          "text": "数据量更大、需要持久保存时，就交给数据库"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "检查 10 万个单词里是否有某个词，用 list 还是 set？",
+          "a": "set，查找平均 O(1)，list 是 O(n)。"
+        },
+        {
+          "q": "dict 底层是什么数据结构？",
+          "a": "Hash table。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w6-04",
+      "title": "Exceptions：出错时不崩溃",
+      "question": "用户输入了非数字怎么办？",
+      "conclusion": "Python 遇到错误会抛出 exception，比如 ValueError。用 try/except 捕获后处理，程序可以继续运行，而不必像 C 那样靠返回值逐层检查。",
+      "points": [
+        "int(\"cat\") 会抛出 ValueError",
+        "越界访问抛出 IndexError，而不是悄悄读错内存",
+        "except 后面写具体的异常类型，不要笼统捕获所有错误"
+      ],
+      "code": "while True:\n    try:\n        n = int(input(\"n: \"))\n        break\n    except ValueError:\n        print(\"Not an integer\")",
+      "analogy": "C 像走钢丝没有保护网，Python 下面挂了一张网。",
+      "links": [
+        {
+          "week": 2,
+          "text": "C 用 return 1 之类的 exit status 报告错误"
+        },
+        {
+          "week": 4,
+          "text": "C 越界访问不会报错，只会读到垃圾值或写坏内存"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "int(\"abc\") 会发生什么？",
+          "a": "抛出 ValueError。"
+        },
+        {
+          "q": "为什么不建议写 except: 捕获所有异常？",
+          "a": "会掩盖意料之外的 bug，使问题更难排查。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w6-05",
+      "title": "Libraries：站在别人的肩膀上",
+      "question": "Python 为什么开发效率高？",
+      "conclusion": "大量功能已经有人写好。import 标准库或用 pip 安装第三方库，几行代码就能处理 CSV、做图像滤镜、语音识别。",
+      "points": [
+        "import csv、import sys 引入标准库",
+        "from PIL import Image 这类第三方库要先 pip install",
+        "sys.argv 读取命令行参数，sys.exit 设置 exit status",
+        "csv.DictReader 把每行读成一个 dict"
+      ],
+      "code": "import csv\n\nwith open(\"favorites.csv\") as f:\n    reader = csv.DictReader(f)\n    for row in reader:\n        print(row[\"language\"])",
+      "analogy": "不用自己种麦子磨面粉，直接去超市买面包。",
+      "links": [
+        {
+          "week": 2,
+          "text": "sys.argv 对应 C 的 argc 和 argv"
+        },
+        {
+          "week": 7,
+          "text": "Week 7 先用 Python 读 CSV，再看到它的局限，引出 SQL"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Python 里怎么读取命令行参数？",
+          "a": "import sys 后使用 sys.argv。"
+        },
+        {
+          "q": "with open(...) 的好处是什么？",
+          "a": "代码块结束时自动关闭文件。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w6-06",
+      "title": "取舍：开发速度 vs 运行速度",
+      "question": "Python 这么方便，为什么还要学 C？",
+      "conclusion": "Python 写得快，跑得慢；C 写得慢，跑得快，还能精确控制内存。同一个拼写检查程序，Python 几十行就够，运行却明显更慢。按场景选语言。",
+      "points": [
+        "Interpreter 逐行翻译，有额外开销",
+        "自动内存管理省心，但你失去了控制权",
+        "性能关键的库（如 NumPy）底层常用 C 实现",
+        "学过 C，才知道 Python 替你隐藏了什么"
+      ],
+      "analogy": "自动挡开起来轻松，手动挡能榨出更多性能。",
+      "links": [
+        {
+          "week": 4,
+          "text": "Python 的 garbage collector 替你做了 free"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Python 运行通常比 C 慢的主要原因是什么？",
+          "a": "解释执行的开销，加上动态类型和自动内存管理带来的额外工作。"
+        },
+        {
+          "q": "什么场景更适合用 C？",
+          "a": "对性能、内存或硬件控制要求高的场景，如操作系统、嵌入式、底层库。"
+        }
+      ],
+      "minutes": 3
+    }
+  ]
+};

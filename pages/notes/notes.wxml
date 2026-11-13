@@ -1,0 +1,115 @@
+<view class="page">
+
+  <view class="top">
+    <view class="kicker-row">
+      <view class="dot"></view>
+      <text class="kicker">{{kicker}}</text>
+    </view>
+    <text class="h1">{{heading}}</text>
+    <text class="lede">{{lede}}</text>
+  </view>
+
+  <view class="block">
+    <text class="h2">框架速览</text>
+    <view class="chain">
+      <block wx:for="{{chain}}" wx:key="index">
+        <view wx:if="{{item.gap}}" class="chain-gap">
+          <text class="chain-gap-label">{{item.label}}</text>
+          <text class="chain-gap-text">{{item.text}}</text>
+        </view>
+        <view wx:else class="chain-item">
+          <text class="chain-n">{{item.n}}</text>
+          <view class="chain-body">
+            <text class="chain-t">{{item.t}}</text>
+            <text class="chain-d">{{item.d}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="block">
+    <view class="progress-row">
+      <text>学习进度</text>
+      <text class="mono muted">已掌握 {{doneCount}} / {{total}}</text>
+    </view>
+    <view class="bar"><view class="fill" style="width: {{pct}}%"></view></view>
+
+    <view class="seg">
+      <view class="seg-btn {{filter === 'all' ? 'on' : ''}}" bindtap="onFilter" data-filter="all" hover-class="tap" aria-role="button">全部</view>
+      <view class="seg-btn {{filter === 'todo' ? 'on' : ''}}" bindtap="onFilter" data-filter="todo" hover-class="tap" aria-role="button">待复习</view>
+      <view class="seg-btn {{filter === 'done' ? 'on' : ''}}" bindtap="onFilter" data-filter="done" hover-class="tap" aria-role="button">已掌握</view>
+    </view>
+
+    <scroll-view class="jump" scroll-x enhanced show-scrollbar="{{false}}">
+      <view wx:for="{{jump}}" wx:key="id" class="jump-item" bindtap="onJump" data-id="{{item.id}}" hover-class="tap" aria-role="button">
+        <text class="jump-key">{{item.key}}</text><text>{{item.title}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view wx:for="{{sections}}" wx:for-item="sec" wx:key="id" id="sec-{{sec.id}}" class="sec">
+    <view class="sec-h">
+      <text class="sec-key">{{sec.key}}</text>
+      <text class="sec-t">{{sec.title}}</text>
+    </view>
+    <text wx:if="{{sec.note}}" class="sec-note">{{sec.note}}</text>
+
+    <view wx:for="{{sec.cards}}" wx:for-item="c" wx:key="id" class="card {{c.done ? 'done' : ''}}">
+      <view class="card-head">
+        <text class="idx">{{c.idx}}</text>
+        <text class="en">{{c.en}}</text>
+        <text wx:if="{{c.zh}}" class="zh">{{c.zh}}</text>
+      </view>
+
+      <text wx:if="{{c.def}}" class="def" user-select>{{c.def}}</text>
+
+      <view wx:if="{{c.ex}}" class="row">
+        <text class="tag">例</text>
+        <text class="row-t" user-select>{{c.ex}}</text>
+      </view>
+
+      <scroll-view wx:if="{{c.hasCode}}" class="code-wrap" scroll-x enhanced show-scrollbar="{{false}}">
+        <text class="code" user-select space="nbsp" decode>{{c.code}}</text>
+      </scroll-view>
+
+      <view wx:if="{{c.sup}}" class="row muted">
+        <text class="tag">补充</text>
+        <text class="row-t" user-select>{{c.sup}}</text>
+      </view>
+
+      <view wx:if="{{c.rel}}" class="row">
+        <text class="tag">关联</text>
+        <text class="row-t" user-select>{{c.rel}}</text>
+      </view>
+
+      <view class="test">
+        <view class="test-sum" bindtap="onToggleOpen" data-id="{{c.id}}" hover-class="tap" aria-role="button">
+          <text class="tag acc">自测</text>
+          <text class="q">{{c.q}}</text>
+          <text class="tg">{{c.open ? '收起' : '展开'}}</text>
+        </view>
+        <view wx:if="{{c.open}}" class="ans">
+          <text user-select>{{c.a}}</text>
+        </view>
+      </view>
+
+      <view class="card-foot">
+        <view class="mark {{c.done ? 'on' : ''}}" bindtap="onToggleDone" data-id="{{c.id}}" hover-class="tap" aria-role="button">{{c.done ? '已掌握' : '标记已掌握'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <text wx:if="{{empty}}" class="empty">没有符合条件的卡片。</text>
+
+  <view class="block res">
+    <text class="h2">原始资料</text>
+    <text class="muted small">小程序内无法直接打开外部网页，点击条目会复制链接，到浏览器里粘贴打开。</text>
+    <view wx:for="{{resources}}" wx:key="url" class="res-item" bindtap="onCopy" data-url="{{item.url}}" hover-class="tap" aria-role="button">
+      <text class="res-label">{{item.label}}</text>
+      <text class="res-url">{{item.url}}</text>
+    </view>
+    <view class="reset" bindtap="onReset" hover-class="tap" aria-role="button">{{resetArmed ? '再点一次确认清空' : '清空进度'}}</view>
+  </view>
+
+</view>

@@ -1,0 +1,247 @@
+{
+  "schema": "cs50-cards/v1",
+  "course": "CS50x 2026",
+  "week": 9,
+  "weekTitle": "Flask",
+  "source": "https://cs50.harvard.edu/x/weeks/9/",
+  "license": "Based on CS50 by Harvard University, CC BY-NC-SA 4.0",
+  "map": {
+    "title": "这一周在全局里的位置",
+    "summary": "Week 9 把前面所有内容合在一起：Python 写服务器逻辑，SQL 存数据，HTML/CSS/JS 做界面，HTTP 连接两端。这就是一个完整的 Web 应用。",
+    "chain": [
+      {
+        "week": 6,
+        "label": "Python",
+        "note": "服务器端语言"
+      },
+      {
+        "week": 7,
+        "label": "SQL",
+        "note": "数据层"
+      },
+      {
+        "week": 8,
+        "label": "HTML, CSS, JS",
+        "note": "界面层与 HTTP"
+      },
+      {
+        "week": 9,
+        "label": "Flask",
+        "note": "路由、模板、session",
+        "current": true
+      },
+      {
+        "week": 10,
+        "label": "The End",
+        "note": "全课复盘"
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "w9-01",
+      "title": "从静态页面到动态应用",
+      "question": "为什么需要服务器端程序？",
+      "conclusion": "静态网页每次返回同样的文件。动态应用在收到 request 时运行代码，根据参数、用户身份、数据库内容现场生成 HTML。Flask 是用 Python 写这类程序的轻量框架。",
+      "points": [
+        "flask run 启动一个本地 web server",
+        "典型目录：app.py、templates/、static/",
+        "框架处理 HTTP 细节，你只写业务逻辑"
+      ],
+      "code": "from flask import Flask, render_template\n\napp = Flask(__name__)\n\n@app.route(\"/\")\ndef index():\n    return render_template(\"index.html\")",
+      "analogy": "静态网站是印好的传单，动态应用是现场根据你的需求出单的柜台。",
+      "links": [
+        {
+          "week": 8,
+          "text": "Week 8 的 HTML 是固定文件，这里改成运行时生成"
+        },
+        {
+          "week": 6,
+          "text": "Flask 就是一个 Python library"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Flask 项目里 HTML 模板放在哪个目录？",
+          "a": "templates/。"
+        },
+        {
+          "q": "动态网站和静态网站的核心区别是什么？",
+          "a": "动态网站在每次请求时运行代码生成内容。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w9-02",
+      "title": "Route 与 decorator",
+      "question": "Flask 怎么知道哪个 URL 该执行哪段代码？",
+      "conclusion": "@app.route(\"/path\") 是一个 decorator，把 URL 路径绑定到下面的函数。请求到达时，Flask 找到匹配的函数，执行它，把返回值作为 response。",
+      "points": [
+        "一个 route 对应一个处理函数",
+        "methods=[\"GET\", \"POST\"] 指定允许的请求方法",
+        "函数返回字符串、模板或 redirect",
+        "Decorator 是“包装函数的函数”"
+      ],
+      "code": "@app.route(\"/greet\", methods=[\"POST\"])\ndef greet():\n    name = request.form.get(\"name\", \"world\")\n    return render_template(\"greet.html\", name=name)",
+      "analogy": "Route 表像公司前台的分机表：打哪个号码，转给哪个部门。",
+      "links": [
+        {
+          "week": 8,
+          "text": "URL 和 GET 请求是 Week 8 讲的 HTTP 内容"
+        },
+        {
+          "week": 1,
+          "text": "每个 route 就是一个 function，abstraction 照旧"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "@app.route 的作用是什么？",
+          "a": "把一个 URL 路径映射到一个处理函数。"
+        },
+        {
+          "q": "读取 GET 参数和 POST 参数分别用什么？",
+          "a": "request.args.get 和 request.form.get。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w9-03",
+      "title": "Jinja 模板：HTML 里放变量",
+      "question": "怎么把 Python 的数据放进 HTML？",
+      "conclusion": "Flask 用 Jinja 模板引擎。{{ name }} 插入变量，{% for %} 和 {% if %} 写循环和条件。layout.html 定义公共骨架，其他页面用 {% extends %} 和 {% block %} 只填写差异部分。",
+      "points": [
+        "render_template(\"x.html\", name=name) 传入变量",
+        "{{ }} 输出值，并自动转义 HTML 防止注入",
+        "{% %} 写控制逻辑",
+        "模板继承避免每页重复写 head 和导航"
+      ],
+      "code": "{% extends \"layout.html\" %}\n{% block body %}\n  <ul>\n  {% for item in items %}\n    <li>{{ item }}</li>\n  {% endfor %}\n  </ul>\n{% endblock %}",
+      "analogy": "模板是带空格的套用信函，每次寄出时填入收件人姓名。",
+      "links": [
+        {
+          "week": 8,
+          "text": "最终输出仍是 Week 8 的普通 HTML"
+        },
+        {
+          "week": 1,
+          "text": "模板继承和函数复用是同一个思想：不要重复自己"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "{{ }} 和 {% %} 的区别？",
+          "a": "{{ }} 输出变量值，{% %} 执行循环、条件等控制语句。"
+        },
+        {
+          "q": "模板继承解决什么问题？",
+          "a": "多个页面共享同一个布局，避免重复代码。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w9-04",
+      "title": "MVC：分层组织代码",
+      "question": "Web 应用的代码怎么分工？",
+      "conclusion": "MVC 把应用分成三层：Model 管数据（SQL 数据库），View 管展示（templates），Controller 管逻辑（app.py 里的 route 函数）。各层职责清楚，修改一层不影响其他层。",
+      "points": [
+        "Controller 接收 request，调用 model，选择 view",
+        "Model：db.execute(\"SELECT ...\")",
+        "View：render_template 渲染 HTML",
+        "表单数据先在 controller 里校验，再写入数据库"
+      ],
+      "code": "@app.route(\"/register\", methods=[\"POST\"])\ndef register():\n    name = request.form.get(\"name\")\n    if not name:\n        return render_template(\"failure.html\")\n    db.execute(\"INSERT INTO registrants (name) VALUES(?)\", name)\n    return redirect(\"/registrants\")",
+      "analogy": "餐厅：Model 是仓库，View 是摆盘，Controller 是接单协调的经理。",
+      "links": [
+        {
+          "week": 7,
+          "text": "Model 层就是 Week 7 的 SQL，记得用 ? placeholder"
+        },
+        {
+          "week": 8,
+          "text": "View 层就是 Week 8 的 HTML 和 CSS"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "MVC 中 SQL 查询属于哪一层？",
+          "a": "Model。"
+        },
+        {
+          "q": "为什么服务器端也要校验表单？",
+          "a": "前端校验可以被绕过，服务器是最后一道防线。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w9-05",
+      "title": "Session 与 cookie：记住用户",
+      "question": "HTTP 无状态，网站怎么知道你已经登录？",
+      "conclusion": "每个 HTTP request 彼此独立。服务器在第一次响应时让浏览器存一个 cookie（含 session ID），之后浏览器每次请求都带上它，服务器据此找到这个用户的 session 数据。",
+      "points": [
+        "Set-Cookie header 让浏览器保存 cookie",
+        "Flask 的 session 像一个按用户区分的 dict",
+        "登录：session[\"user_id\"] = id；登出：session.clear()",
+        "密码要存 hash，不能存明文"
+      ],
+      "code": "@app.route(\"/login\", methods=[\"POST\"])\ndef login():\n    session[\"name\"] = request.form.get(\"name\")\n    return redirect(\"/\")",
+      "analogy": "游乐园的手环：进门时戴上，之后每个项目看一眼手环就知道你买过票。",
+      "links": [
+        {
+          "week": 6,
+          "text": "session 的用法就是 Python dict"
+        },
+        {
+          "week": 2,
+          "text": "Week 2 作业里的 Caesar 是可逆加密；密码要用不可逆的 hash 存储，更安全"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "HTTP 是有状态还是无状态的？",
+          "a": "无状态，每个 request 相互独立。"
+        },
+        {
+          "q": "Cookie 存在哪里，session 数据存在哪里？",
+          "a": "Cookie 存在浏览器；session 数据通常存在服务器，cookie 只带一个 session ID。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w9-06",
+      "title": "API 与 JSON：只传数据",
+      "question": "页面怎么不刷新就更新内容？",
+      "conclusion": "Route 可以不返回 HTML，而是返回 JSON 数据。前端 JavaScript 用 fetch 请求这个 API，拿到数据后自己更新 DOM。前后端通过 JSON 这种通用格式交流。",
+      "points": [
+        "jsonify(list_or_dict) 返回 JSON",
+        "JSON 结构和 Python 的 dict、list 几乎一样",
+        "搜索框边输入边出结果，就是这种模式",
+        "API 也可以给手机 App 等其他客户端使用"
+      ],
+      "code": "@app.route(\"/search\")\ndef search():\n    q = request.args.get(\"q\")\n    rows = db.execute(\"SELECT title FROM shows WHERE title LIKE ?\", \"%\" + q + \"%\")\n    return jsonify(rows)",
+      "analogy": "以前每次都端来整桌菜（HTML），现在只送需要补的那盘（JSON）。",
+      "links": [
+        {
+          "week": 8,
+          "text": "用 JavaScript 操作 DOM 是 Week 8 的内容"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "jsonify 返回的是什么？",
+          "a": "一个 Content-Type 为 application/json 的 response。"
+        },
+        {
+          "q": "返回 JSON 比返回整页 HTML 好在哪？",
+          "a": "传输更少，前端可局部更新，同一 API 可供多种客户端使用。"
+        }
+      ],
+      "minutes": 3
+    }
+  ]
+}

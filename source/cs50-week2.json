@@ -1,0 +1,247 @@
+{
+  "schema": "cs50-cards/v1",
+  "course": "CS50x 2026",
+  "week": 2,
+  "weekTitle": "Arrays",
+  "source": "https://cs50.harvard.edu/x/weeks/2/",
+  "license": "Based on CS50 by Harvard University, CC BY-NC-SA 4.0",
+  "map": {
+    "title": "这一周在全局里的位置",
+    "summary": "Week 2 做了两件事：拆开 make 看编译到底发生了什么；引入 array，让一组数据连续存放并按下标访问。string 原来只是 char 的数组。",
+    "chain": [
+      {
+        "week": 1,
+        "label": "C",
+        "note": "单个变量，一键编译"
+      },
+      {
+        "week": 2,
+        "label": "Arrays",
+        "note": "编译四步、数组、命令行参数",
+        "current": true
+      },
+      {
+        "week": 3,
+        "label": "Algorithms",
+        "note": "在数组上搜索和排序"
+      },
+      {
+        "week": 4,
+        "label": "Memory",
+        "note": "数组背后的地址"
+      },
+      {
+        "week": 5,
+        "label": "Data Structures",
+        "note": "数组固定大小的局限"
+      }
+    ]
+  },
+  "cards": [
+    {
+      "id": "w2-01",
+      "title": "编译的四个步骤",
+      "question": "make 背后发生了什么？",
+      "conclusion": "make 调用 clang，clang 依次做 preprocessing、compiling、assembling、linking，最终把你的代码和库代码合成一个可执行文件。",
+      "points": [
+        "Preprocessing：把 #include 的 header 内容展开进来",
+        "Compiling：C 代码翻译成 assembly",
+        "Assembling：assembly 翻译成 machine code",
+        "Linking：把你的 machine code 和 cs50、stdio 等库合并",
+        "手动编译需要 -lcs50 告诉 linker 链接 CS50 库"
+      ],
+      "code": "clang -o hello hello.c -lcs50",
+      "analogy": "像出版一本书：引用资料先贴进来，翻译，排版，最后和附录装订成册。",
+      "links": [
+        {
+          "week": 1,
+          "text": "Week 1 的 make hello 其实就是这四步的封装"
+        },
+        {
+          "week": 6,
+          "text": "Python 省掉了这条链路，代价是运行时更慢"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "#include <stdio.h> 在哪一步处理？",
+          "a": "Preprocessing。"
+        },
+        {
+          "q": "忘记 -lcs50 会在哪一步报错？",
+          "a": "Linking，找不到 get_string 等函数的实现。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w2-02",
+      "title": "Debugging 的三种工具",
+      "question": "程序结果不对时怎么找原因？",
+      "conclusion": "printf 打印中间值；debugger（debug50）逐行执行并查看变量；rubber duck debugging 把逻辑讲给别人或鸭子听。先缩小范围，再看细节。",
+      "points": [
+        "printf 最快，但会弄乱代码，用完要删",
+        "Debugger 可以设 breakpoint，step over / step into",
+        "讲解代码时经常自己发现问题"
+      ],
+      "analogy": "printf 是装临时摄像头，debugger 是把时间暂停逐帧看。",
+      "links": [
+        {
+          "week": 4,
+          "text": "Week 4 的 valgrind 专门查内存错误"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "Breakpoint 的作用是什么？",
+          "a": "让程序运行到指定行时暂停，便于查看当时的变量。"
+        },
+        {
+          "q": "Step into 和 step over 的区别？",
+          "a": "Step into 进入被调用的函数内部，step over 把整个函数调用当一步执行。"
+        }
+      ],
+      "minutes": 2
+    },
+    {
+      "id": "w2-03",
+      "title": "Array：连续存放的一组值",
+      "question": "为什么需要 array？",
+      "conclusion": "Array 把同类型的多个值连续放在内存里，用一个名字加下标访问。下标从 0 开始，长度在声明时固定，C 不检查越界。",
+      "points": [
+        "int scores[3]; 声明 3 个 int，下标 0 到 2",
+        "配合循环批量处理，避免 score1、score2、score3",
+        "C 不会记录数组长度，需要自己另外保存",
+        "访问 scores[3] 不会报错，但会读到别人的内存"
+      ],
+      "code": "const int N = 3;\nint scores[N];\nfor (int i = 0; i < N; i++)\n{\n    scores[i] = get_int(\"Score: \");\n}",
+      "analogy": "一排连号的储物柜，知道第一个柜子的位置就能算出任何一个。",
+      "links": [
+        {
+          "week": 3,
+          "text": "搜索和排序算法都在 array 上进行"
+        },
+        {
+          "week": 5,
+          "text": "Array 大小固定、插入代价高，引出 linked list"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "int a[5]; 合法下标是哪些？",
+          "a": "0 到 4。"
+        },
+        {
+          "q": "C 访问越界下标会怎样？",
+          "a": "不会报编译错误，可能读到垃圾值或导致 segfault。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w2-04",
+      "title": "String 是 char 数组",
+      "question": "字符串在内存里长什么样？",
+      "conclusion": "String 是连续的 char，末尾跟一个值为 0 的字节 \\0（NUL）标记结束。所以 \"HI!\" 占 4 个字节，strlen 就是数到 \\0 为止。",
+      "points": [
+        "s[0] 是第一个字符，可以按下标逐个访问",
+        "char 本质是数字，'A' + 1 就是 'B'",
+        "string.h 提供 strlen；ctype.h 提供 toupper、isalpha 等",
+        "循环里反复调用 strlen 浪费性能，先存到变量"
+      ],
+      "code": "string s = \"HI!\";\nfor (int i = 0, n = strlen(s); i < n; i++)\n{\n    printf(\"%c\", toupper(s[i]));\n}",
+      "analogy": "一串珠子，最后一颗是透明的结束标记。",
+      "links": [
+        {
+          "week": 0,
+          "text": "char 就是 ASCII 数字，大小写转换就是加减 32"
+        },
+        {
+          "week": 4,
+          "text": "Week 4 揭示 string 变量只存首字符的地址"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "\"CS50\" 占几个字节？",
+          "a": "5 个，4 个字符加 1 个 \\0。"
+        },
+        {
+          "q": "C 怎么知道字符串在哪里结束？",
+          "a": "读到 \\0 为止。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w2-05",
+      "title": "命令行参数与 exit status",
+      "question": "程序怎么从命令行拿输入、怎么报告成败？",
+      "conclusion": "main 可以接收 argc（参数个数）和 argv（参数数组），argv[0] 是程序名。main 的返回值是 exit status，0 表示成功，非 0 表示出错。",
+      "points": [
+        "int main(int argc, string argv[])",
+        "./caesar 3 中 argc 为 2，argv[1] 是 \"3\"（字符串，需要转换）",
+        "return 1 告诉系统出错了，脚本可据此判断",
+        "echo $? 查看上一个程序的 exit status"
+      ],
+      "code": "int main(int argc, string argv[])\n{\n    if (argc != 2)\n    {\n        printf(\"Usage: ./greet name\\n\");\n        return 1;\n    }\n    printf(\"hello, %s\\n\", argv[1]);\n    return 0;\n}",
+      "analogy": "命令行参数是下单时附的备注，exit status 是快递签收回执。",
+      "links": [
+        {
+          "week": 6,
+          "text": "Python 用 sys.argv 和 sys.exit 做同样的事"
+        },
+        {
+          "week": 8,
+          "text": "Week 8 的 HTTP status code（200、404）是同类思想"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "运行 ./prog a b，argc 是多少？",
+          "a": "3，包括程序名本身。"
+        },
+        {
+          "q": "exit status 0 代表什么？",
+          "a": "程序成功结束。"
+        }
+      ],
+      "minutes": 3
+    },
+    {
+      "id": "w2-06",
+      "title": "Cryptography：对字符做运算",
+      "question": "最简单的加密是怎么实现的？",
+      "conclusion": "加密就是用 key 把 plaintext 变成 ciphertext。Caesar cipher 把每个字母按 key 位移并绕回字母表开头，本质是对 char 的数字做加法和取模。",
+      "points": [
+        "key = 1 时，A 变 B，Z 绕回 A",
+        "取模 % 26 实现绕回",
+        "只处理字母，保留大小写，其他字符原样输出",
+        "Caesar 只有 25 种 key，暴力破解很容易"
+      ],
+      "code": "char c = 'Y';\nint key = 3;\nchar e = (c - 'A' + key) % 26 + 'A';  // 'B'",
+      "analogy": "两个转盘对齐字母表，转动几格就是 key。",
+      "links": [
+        {
+          "week": 0,
+          "text": "字母就是数字，所以能直接做算术"
+        },
+        {
+          "week": 9,
+          "text": "Week 9 的 Finance 作业用不可逆的 hash 存储密码，比 Caesar 这类可逆加密安全"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "key = 2 时，'Z' 加密后是什么？",
+          "a": "'B'。"
+        },
+        {
+          "q": "为什么 Caesar cipher 不安全？",
+          "a": "Key 空间只有 25 种，全部试一遍即可破解。"
+        }
+      ],
+      "minutes": 3
+    }
+  ]
+}
