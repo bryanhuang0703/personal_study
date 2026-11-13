@@ -15,6 +15,7 @@ const DECKS = [
   require('./decks/cs50-w5.js'),
   require('./decks/cs50-w6.js'),
   require('./decks/cs50-w7.js'),
+  require('./decks/cs50-ai.js'),
   // </decks>
 ];
 
@@ -25,6 +26,13 @@ const cache = {};
 // 第 5 列可选扩展：{ abbr, noteEn, why, whyEn }
 function build(d) {
   if (cache[d.id]) return cache[d.id];
+  if (d.type === 'notes') {
+    // 讲义卡：items 为各分节卡片拍平，进度按卡片 id 记“已掌握”
+    let seq = 0;
+    const items = [].concat(...d.sections.map(s => s.cards.map(c => Object.assign({}, c, { idx: pad(++seq), section: s.id }))));
+    cache[d.id] = Object.assign({}, d, { items });
+    return cache[d.id];
+  }
   if (d.type === 'lesson') {
     // 概念卡：items 即 cards，进度按卡片下标记“已学完”
     const items = d.cards.map((c, i) => Object.assign({ i, no: pad(i + 1), points: [], links: [], quiz: [], minutes: 0 }, c));
@@ -49,9 +57,10 @@ function build(d) {
 module.exports = {
   // 首页顺序：按注册顺序；同一课程的 lesson 聚在第一次出现的位置，并按 week 升序
   list: () => {
-    const groupPos = d => DECKS.findIndex(x => d.type === 'lesson' ? x.type === 'lesson' && x.course === d.course : x === d);
+    // 有 course 的模块（各周 lesson、讲义 notes）归为一组；没有 week 的排在组尾
+    const groupPos = d => DECKS.findIndex(x => d.course ? x.course === d.course : x === d);
     return DECKS
-      .map((d, i) => ({ d, g: groupPos(d), w: d.type === 'lesson' ? d.week : i }))
+      .map((d, i) => ({ d, g: groupPos(d), w: d.course ? (d.week != null ? d.week : 1e9 + i) : i }))
       .sort((a, b) => a.g - b.g || a.w - b.w)
       .map(x => build(x.d));
   },

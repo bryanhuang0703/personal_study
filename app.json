@@ -2,7 +2,8 @@
   "pages": [
     "pages/index/index",
     "pages/glossary/glossary",
-    "pages/lesson/lesson"
+    "pages/lesson/lesson",
+    "pages/notes/notes"
   ],
   "window": {
     "navigationBarTitleText": "学习工具",

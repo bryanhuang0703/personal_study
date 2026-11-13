@@ -11,6 +11,7 @@ data/decks/<id>.js                 每个学习模块一份数据
 pages/index/                       首页：模块列表 + 进度
 pages/glossary/                    术语类模块（type: glossary）：浏览 / 问答 / 闪卡 / 自测
 pages/lesson/                      概念卡模块（type: lesson）：概览 / 学习 / 自测
+pages/notes/                       讲义卡模块（type: notes）：框架速览 + 分节卡片 + 筛选，单页
 utils/store.js                     本地进度（wx storage，按模块隔离）
 source/                            原始 HTML 存档（不打包）
 tools/html2deck.js                 术语 HTML → 模块数据（不打包）
@@ -47,6 +48,8 @@ for f in source/cs50-week*.json; do node tools/cs50-json2deck.js "$f"; done
 ```
 
 学习进度按卡片 `id` 存储：修改卡片内容不要改 `id`，新增卡片要用新 `id`。同一课程（`course` 相同）的各周会自动互相链接：概览里的周时间线、卡片里的「前后联系」点击即跳到对应周，没加入的周会提示。
+
+**讲义卡（如 CS50 AI）**：数据在 `data/decks/cs50-ai.js`，字段为 `chain`（框架速览，`gap` 为过渡说明）、`sections[].cards[]`（`id`、`en`、`zh`、`def`、`ex`、`code`、`sup`、`rel`、`q`、`a`）、`resources`。原始数据存档在 `source/cs50-ai/ai.js`。进度按卡片 `id` 存。
 
 **格式不同的 HTML**（比如 `source/ta-kit-glossary.html`）：发给 Claude 转换即可。术语页支持的可选字段：
 
